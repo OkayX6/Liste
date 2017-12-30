@@ -87,9 +87,9 @@ class App extends React.Component {
 
             return (
                 <div className="container">
-                    <header className={this.appearanceClass()}>
-                        liste <i class="fa fa-hand-pointer-o" aria-hidden="true"></i> 
-                    </header>
+                    <div id="title" className={this.appearanceClass()}>
+                        liste <i className="fa fa-hand-pointer-o" aria-hidden="true"></i> 
+                    </div>
                     {this.state.profilePicture &&
                         <img src={this.state.profilePicture} />}
 
@@ -100,9 +100,15 @@ class App extends React.Component {
                     </nav>
 
                     <section className={this.appearanceClass()}>
+                        <div>
+                        </div>
                         <a className="button" href="#" onClick={() => this.closeSection()}>
                             fermer <i className="fa fa-arrow-right" aria-hidden="true"></i>
                         </a>
+
+                        <header>proposer un objet</header>
+
+                        <div>sldkfjlskdfj</div>
 
                         <form>
                         </form>

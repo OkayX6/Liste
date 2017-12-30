@@ -4,6 +4,12 @@ body {
     letter-spacing: -0.01em;
 }
 
+.container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
 ol, ul {
     padding-left: 30px;
 }
@@ -13,13 +19,13 @@ a {
     color: black;
 }
 
-header {
+#title {
     pointer-events: none;
     position: relative;
     width: 100%;
     text-align: right;
     top: 0.2em;
-    right: 0.5em;
+    right: 0.75em;
     font-family: "Pacifico", cursive;
     font-size: 30px;
     -webkit-transition: width 0.4s, right 0.4s;
@@ -110,11 +116,11 @@ nav .nav-item:hover {
 
 section {
     pointer-events: none;
-    position: absolute;
-    text-align: start;
+    position: fixed;
+    text-align: left;
     top: 0px;
+    width: 90%;
     left: 80%;
-    right: 0px;
     bottom: 0px;
     padding: 20px;
     background: white;
@@ -130,17 +136,22 @@ section.section-is-active {
     box-shadow: 0 0 10em 0 rgba(0,0,0,0.2);
 }
 
-.container {
-    text-align: center;
+section .button {
+    display: inline-block;
+    font-size: 26px;
+    vertical-align: baseline;
+}
+
+section header {
+    display: inline-block;
+    font-size: 50px;
+    margin-left: 3em;
+    vertical-align: baseline;
 }
 
 @media screen and (max-width: 42em) {
 	header { font-size: 2em; }
 	nav { font-size: 3.25em; }
-}
-
-section .button {
-    font-size: 30px;
 }
 
 /* Takiri */
