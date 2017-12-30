@@ -49,7 +49,11 @@ class App extends React.Component {
         if (this.state.currentSection == null)
             this.setState({ currentSection: sectionName });
         else
-            this.setState({ currentSection: null });
+            this.closeSection();
+    }
+
+    closeSection() {
+        this.setState({ currentSection: null });
     }
 
     render() {
@@ -83,22 +87,31 @@ class App extends React.Component {
 
             return (
                 <div className="container">
+                    <header className={this.appearanceClass()}>
+                        liste <i class="fa fa-hand-pointer-o" aria-hidden="true"></i> 
+                    </header>
                     {this.state.profilePicture &&
                         <img src={this.state.profilePicture} />}
 
                     <nav className={this.appearanceClass()}>
-                        <a className="nav-item" href="#add-object" onClick={() => this.openSection('add-object')}>&gt; ajouter objet</a>
-                        <a className="nav-item" href="#process-gift" onClick={() => this.openSection('process-gift')}>&gt; conclure don</a>
+                        <a className="nav-item" href="#add-object" onClick={() => this.openSection('add-object')}>&gt; proposer un objet</a>
+                        <a className="nav-item" href="#process-gift" onClick={() => this.openSection('process-gift')}>&gt; conclure un deal</a>
                         <a className="nav-item" href="#explore" onClick={() => this.openSection('explore')}>&gt; explorer</a>
                     </nav>
 
                     <section className={this.appearanceClass()}>
-                        <i className="fa fa-arrow-left" aria-hidden="true"></i>
+                        <a className="button" href="#" onClick={() => this.closeSection()}>
+                            fermer <i className="fa fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+
+                        <form>
+                        </form>
                     </section>
 
-                    <div><button onClick={() => this.setState({ isConnected: false }) }>Logout</button></div>
                 </div>
             );
+
+            //<div><button onClick={() => this.setState({ isConnected: false }) }>Logout</button></div>
         }
     }
 }

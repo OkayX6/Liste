@@ -1,6 +1,7 @@
 body {
     /*font: 16px "Helvetica Neue", "Segoe UI Light", sans-serif;*/
     font-family: "Oswald", "Segoe UI Light", "Helvetica Neue", sans-serif;
+    letter-spacing: -0.01em;
 }
 
 ol, ul {
@@ -8,25 +9,42 @@ ol, ul {
 }
 
 a {
+    text-decoration: none;
     color: black;
 }
+
+header {
+    pointer-events: none;
+    position: relative;
+    width: 100%;
+    text-align: right;
+    top: 0.2em;
+    right: 0.5em;
+    font-family: "Pacifico", cursive;
+    font-size: 30px;
+    -webkit-transition: width 0.4s, right 0.4s;
+    transition: width 0.4s, right 0.4s;
+    /*z-index: 10;*/
+}
+
+/*header.section-is-active {
+    width: 20%;
+    right: initial;
+}*/
 
 nav {
     font-family: "Oswald", sans-serif;
     font-style: normal;
-    font-size: 68px;
+    font-size: 48px;
     text-align: left;
     position: fixed;
     top: 0px;
     left: 0px;
     height: 100%;
+    margin-top: 1em;
     /*-webkit-transition: left 0.4s;
     transition: left 0.4s;*/
 }
-
-/*nav.active {
-    left: -2em;
-}*/
 
 nav::after {
     pointer-events: none;
@@ -91,6 +109,7 @@ nav .nav-item:hover {
 }
 
 section {
+    pointer-events: none;
     position: absolute;
     text-align: start;
     top: 0px;
@@ -105,6 +124,7 @@ section {
 }
 
 section.section-is-active {
+    pointer-events: initial;
     left: 10em;
     opacity: 1;
     box-shadow: 0 0 10em 0 rgba(0,0,0,0.2);
@@ -115,9 +135,13 @@ section.section-is-active {
 }
 
 @media screen and (max-width: 42em) {
+	header { font-size: 2em; }
 	nav { font-size: 3.25em; }
 }
 
+section .button {
+    font-size: 30px;
+}
 
 /* Takiri */
 .link--takiri {
