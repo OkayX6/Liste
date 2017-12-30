@@ -4,6 +4,12 @@ import FacebookLogin from 'react-facebook-login';
 import fetch from 'node-fetch';
 import './index.css';
 
+// Font Awesome
+// REF: https://stackoverflow.com/questions/23116591/how-to-include-a-font-awesome-icon-in-reacts-render
+import 'font-awesome/css/font-awesome.min.css';
+
+import classNames from 'classnames';
+
 const apiHost = "http://localhost:8080";
 
 function fetchStartupData() {
@@ -17,6 +23,7 @@ class App extends React.Component {
             isConnected: true,
             fbAccessToken: null,
             profilePicture: null,
+            currentSection: null,
         };
     }
 
@@ -32,32 +39,17 @@ class App extends React.Component {
             .then(function (body) {
                 this.setState({ profilePicture: body.picture.data.url })
             }.bind(this));
-        //fetchStartupData()
-        //    .then(response => response.json())
-        //    .then(function (body) {
-        //        this.setState({ profilePicture: body.picture });
-        //    }.bind(this));
     }
 
-    sectionClass() {
-        if (this.state.route != null)
-            return "active";
-        else
-            return "inactive";
+    appearanceClass() {
+        return classNames({ 'section-is-active': this.state.currentSection != null });
     }
 
-    navClass() {
-        if (this.state.route != null)
-            return "active";
+    openSection(sectionName) {
+        if (this.state.currentSection == null)
+            this.setState({ currentSection: sectionName });
         else
-            return "";
-    }
-
-    toggleRoute(routeName) {
-        if (this.state.route == null)
-            this.setState({ route: routeName });
-        else
-            this.setState({ route: null });
+            this.setState({ currentSection: null });
     }
 
     render() {
@@ -94,14 +86,14 @@ class App extends React.Component {
                     {this.state.profilePicture &&
                         <img src={this.state.profilePicture} />}
 
-                    <nav className={this.navClass()}>
-                        <a className="nav-item" href="#add-object" onClick={() => !this.state.route && this.toggleRoute('add-object')}>&gt; ajouter objet</a>
-                        <a className="nav-item" href="#process-gift" onClick={() => !this.state.route && this.toggleRoute('process-gift')}>&gt; conclure don</a>
-                        <a className="nav-item" href="#explore" onClick={() => !this.state.route && this.toggleRoute('explore')}>&gt; explorer</a>
+                    <nav className={this.appearanceClass()}>
+                        <a className="nav-item" href="#add-object" onClick={() => this.openSection('add-object')}>&gt; ajouter objet</a>
+                        <a className="nav-item" href="#process-gift" onClick={() => this.openSection('process-gift')}>&gt; conclure don</a>
+                        <a className="nav-item" href="#explore" onClick={() => this.openSection('explore')}>&gt; explorer</a>
                     </nav>
 
-                    <section className={this.sectionClass()}>
-                        <header>ajouter object</header>
+                    <section className={this.appearanceClass()}>
+                        <i className="fa fa-arrow-left" aria-hidden="true"></i>
                     </section>
 
                     <div><button onClick={() => this.setState({ isConnected: false }) }>Logout</button></div>

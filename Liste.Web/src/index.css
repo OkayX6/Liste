@@ -71,7 +71,7 @@ nav .nav-item:hover {
     width: 80%;
     padding-left: 0%;
     left: 125px;
-    margin-top:22.5%;
+    margin-top:1em;
     /*background: #7F7F7F;*/
     background: #FFFF00;
     opacity: 0.7;
@@ -80,16 +80,9 @@ nav .nav-item:hover {
     -webkit-transition: -webkit-transform 0.4s;
     transition: transform 0.4s;
     /*height: 36px;
-    width: 120%;
-    top: 50%;
-    margin-top: -18px;
-    left: -10%;
-    z-index: -1;
-    background: #F9F9F9;
     -webkit-transform: rotate3d(0,0,1,45deg) scale3d(0,1,1);
     transform: rotate3d(0,0,1,45deg) scale3d(0,1,1);
-    -webkit-transition: -webkit-transform 0.5s;
-    transition: transform 0.5s;*/
+    */
 }
 
 .nav-item:hover::before {
@@ -111,7 +104,7 @@ section {
     transition: left 0.4s, opacity 0,4s;
 }
 
-section.active {
+section.section-is-active {
     left: 10em;
     opacity: 1;
     box-shadow: 0 0 10em 0 rgba(0,0,0,0.2);
