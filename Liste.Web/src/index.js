@@ -111,11 +111,15 @@ class App extends React.Component {
                             <div className="left-part"></div>
                             <div className="right-part">
                                 <form className="add-item-form">
-                                    <input type="text" name="description" placeholder="description" />
-                                    <div className="add-item-picture">
+                                    <div className="add-item-description">
+                                        <input type="text" name="description" placeholder="description" />
+                                        <div className="decoration-under-input">
+                                        </div>
+                                    </div>
+                                    {/* <div className="add-item-picture">
                                         <div className="picture-upload-bg"></div>
                                         <input type="file" name="picture" />
-                                    </div>
+                                    </div> */}
                                 </form>
                             </div>
                         </div>
