@@ -24,6 +24,7 @@ class App extends React.Component {
             fbAccessToken: null,
             profilePicture: null,
             currentSection: 'add-object',
+            //currentSection: null,
         };
     }
 
@@ -117,8 +118,11 @@ class App extends React.Component {
                                         </div>
                                     </div>
                                     <div className="add-item-picture">
-                                        {/*<div className="picture-upload-bg"></div>
-                                        <input type="file" name="picture" />*/}
+                                        <input type="file" name="picture" />
+                                        <div className="picture-upload-bg">
+                                            <i className="fa fa-cloud-upload" aria-hidden="true"></i>
+                                            uploader photo
+                                        </div>
                                     </div>
                                 </form>
                             </div>

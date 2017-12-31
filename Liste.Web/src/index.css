@@ -181,6 +181,11 @@ section .section-content-part .right-part {
     margin-top: 2rem;
     width: 25rem;
     height: 30rem;
+
+    font-family: "Oswald";
+    font-size: 26px;
+    font-weight: 200;
+    font-style: normal;
 }
 
 /* FORM: 1/2 - DESCRIPTION */
@@ -212,19 +217,21 @@ section .section-content-part .right-part {
     cursor: pointer; /* "hand" cursor */
     width: 100%;
     height: 100%;
-    background: grey;
-    z-index: 0;
 }
 
 .add-item-form .picture-upload-bg {
     pointer-events: none;
-    display: block;
-    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    top: -100%;
     width: 100%;
     height: 100%;
-    background-color: #777;
-    opacity: 1;
-    z-index: 1;
+    text-align: center;
+    /*background: #FFFF7F;*/
+    color: #777;
+    text-transform: uppercase;
 }
 
 @media screen and (max-width: 42em) {
