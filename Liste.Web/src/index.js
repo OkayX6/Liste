@@ -116,10 +116,10 @@ class App extends React.Component {
                                         <div className="decoration-under-input">
                                         </div>
                                     </div>
-                                    {/* <div className="add-item-picture">
-                                        <div className="picture-upload-bg"></div>
-                                        <input type="file" name="picture" />
-                                    </div> */}
+                                    <div className="add-item-picture">
+                                        {/*<div className="picture-upload-bg"></div>
+                                        <input type="file" name="picture" />*/}
+                                    </div>
                                 </form>
                             </div>
                         </div>
