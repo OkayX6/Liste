@@ -23,7 +23,7 @@ class App extends React.Component {
             isConnected: true,
             fbAccessToken: null,
             profilePicture: null,
-            currentSection: null,
+            currentSection: 'add-object',
         };
     }
 
@@ -100,18 +100,25 @@ class App extends React.Component {
                     </nav>
 
                     <section className={this.appearanceClass()}>
-                        <div>
+                        <div className="section-header-part">
+                            <a className="section-close-button" href="#" onClick={() => this.closeSection()}>
+                                fermer <i className="fa fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                            <div className="section-header-title">proposer un objet</div>
                         </div>
-                        <a className="button" href="#" onClick={() => this.closeSection()}>
-                            fermer <i className="fa fa-arrow-right" aria-hidden="true"></i>
-                        </a>
 
-                        <header>proposer un objet</header>
-
-                        <div>sldkfjlskdfj</div>
-
-                        <form>
-                        </form>
+                        <div className="section-content-part">
+                            <div className="left-part"></div>
+                            <div className="right-part">
+                                <form className="add-item-form">
+                                    <input type="text" name="description" placeholder="description" />
+                                    <div className="add-item-picture">
+                                        <div className="picture-upload-bg"></div>
+                                        <input type="file" name="picture" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </section>
 
                 </div>
