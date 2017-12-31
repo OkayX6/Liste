@@ -209,8 +209,6 @@ section .section-content-part .right-part {
 }
 
 .add-item-form input[name="picture"] {
-    /*display: block;
-    position: absolute;*/
     cursor: pointer; /* "hand" cursor */
     width: 100%;
     height: 100%;
