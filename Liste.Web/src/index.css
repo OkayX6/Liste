@@ -257,11 +257,19 @@ section .section-content-part .right-part {
     text-transform: uppercase;
 }
 
-.add-item-form .submit-item-btn {
+.add-item-form button.submit-item-btn {
     position: absolute;
     bottom: 0;
     width: 100%;
-    opacity: 0.6;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.add-item-form .submit-item-btn:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.add-item-form .submit-item-btn:active {
+    background-color: rgba(255, 255, 255, 1);
 }
 
 @media screen and (max-width: 42em) {
