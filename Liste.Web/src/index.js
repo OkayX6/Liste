@@ -16,6 +16,13 @@ function fetchStartupData() {
     return fetch(apiHost + '/startup');
 }
 
+class FontAwesome extends React.Component {
+    render() {
+        var iconClass = "fa fa-" + this.props.iconName;
+        return (<i className={iconClass}></i>);
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -103,7 +110,7 @@ class App extends React.Component {
                     <section className={this.appearanceClass()}>
                         <div className="section-header-part">
                             <a className="section-close-button" href="#" onClick={() => this.closeSection()}>
-                                fermer <i className="fa fa-arrow-right" aria-hidden="true"></i>
+                                fermer <FontAwesome iconName="arrow-right" />
                             </a>
                             <div className="section-header-title">proposer un objet</div>
                         </div>
@@ -118,10 +125,13 @@ class App extends React.Component {
                                         <input type="file" name="picture" />
                                         <div className="picture-upload-bg">
                                             <div>
-                                                <i className="fa fa-cloud-upload" aria-hidden="true"></i>
+                                                <FontAwesome iconName="cloud-upload" />
                                                 &nbsp;uploader photo
                                             </div>
                                         </div>
+                                        <button className="submit-item-btn">
+                                            <FontAwesome iconName="check" />
+                                        </button>
                                     </div>
                                 </form>
                             </div>
