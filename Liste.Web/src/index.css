@@ -241,32 +241,21 @@ section .section-content-part .right-part {
 }
 
 .add-item-form input[name="picture"] {
-    cursor: pointer; /* "hand" cursor */
-
-    position: absolute;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-
-    opacity: 0;
-    z-index: 1;
+    display: none;
 }
 
 .picture-upload-area .picture-upload-overlay {
     /* Appearance */
     color: #777;
     text-transform: uppercase;
-    opacity: 1;
+    opacity: 0.4;
+    cursor: pointer; /* "hand" cursor */
 
     /* Text alignment */
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    /* Rendering artifacts */
-    pointer-events: none;
-    /*z-index: 3;*/
 
     /* Height */
     height: 100%;
@@ -278,7 +267,8 @@ section .section-content-part .right-part {
 }
 
 .add-item-form .submit-item-btn {
-    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .add-item-form .submit-item-btn:hover {

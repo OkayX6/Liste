@@ -123,7 +123,7 @@ class App extends React.Component {
                                     <div className="decoration-under-input"></div>
                                     <div className="add-item-picture">
                                         {/* Input: upload file */}
-                                        <div className="picture-upload-area">
+                                        <label className="picture-upload-area">
                                             {/* Input: upload file */}
                                             <input type="file" name="picture" className="debug" />
 
@@ -132,7 +132,7 @@ class App extends React.Component {
                                                 <FontAwesome iconName="cloud-upload" />
                                                 &nbsp;uploader photo
                                             </div>
-                                        </div>
+                                        </label>
 
                                         {/* Submit button */}
                                         <button className="submit-item-btn">
