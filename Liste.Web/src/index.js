@@ -16,11 +16,10 @@ function fetchStartupData() {
     return fetch(apiHost + '/startup');
 }
 
-class FontAwesome extends React.Component {
-    render() {
-        var iconClass = "fa fa-" + this.props.iconName;
-        return (<i className={iconClass}></i>);
-    }
+// Functional FontAwesome component
+function FontAwesome(props) {
+    var iconClass = "fa fa-" + props.iconName;
+    return (<i className={iconClass}></i>);
 }
 
 class App extends React.Component {
