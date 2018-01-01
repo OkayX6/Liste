@@ -9,6 +9,14 @@ body {
     letter-spacing: -0.01em;
 }
 
+.debug {
+    border: 1px solid red;
+}
+
+.debug2 {
+    border: 1px solid green;
+}
+
 .container {
 }
 
@@ -121,6 +129,10 @@ nav .nav-item:hover {
 }
 
 section {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+
     pointer-events: none;
     position: fixed;
     text-align: left;
@@ -144,12 +156,8 @@ section.section-is-active {
     opacity: 1;
 }
 
-section > .section-header-part {
-    display: block;
-}
-
 section > .section-content-part {
-    display: block;
+    display: flex;
 }
 
 section .section-close-button {
@@ -162,17 +170,15 @@ section .section-close-button {
 section .section-header-title {
     display: inline-block;
     font-size: 50px;
-    width: 60%;
     vertical-align: baseline;
 }
 
 section .section-content-part .left-part {
-    display: inline-block;
     width: 13rem;
 }
 
 section .section-content-part .right-part {
-    display: inline-block;
+    display: flex;
 }
 
 /* FORM - Create input */
@@ -192,13 +198,14 @@ section .section-content-part .right-part {
 }
 
 /* FORM: 1/2 - DESCRIPTION */
-.add-item-description input[name="description"] {
-    display: block;
+.add-item-form input[name="description"] {
     width: 100%;
     box-sizing: border-box;
 }
 
-.add-item-description .decoration-under-input {
+.add-item-form .decoration-under-input {
+    height: 12px;
+    width: 100%;
     background: repeating-linear-gradient(
         45deg,
         white,
@@ -206,33 +213,38 @@ section .section-content-part .right-part {
         #444 2px,
         #444 4px
     );
-    height: 12px;
 }
 
 /* FORM: 2/2 - PICTURE */
 .add-item-form .add-item-picture {
     flex: 1;
-    background: #FFFF7F;
-    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .add-item-form input[name="picture"] {
     cursor: pointer; /* "hand" cursor */
     width: 100%;
     height: 100%;
+    background: blue;
 }
 
 .add-item-form .picture-upload-bg {
     pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    top: -100%;
+
+    /* Dimensions & positioning */
     width: 100%;
     height: 100%;
+    transform: translateY(-100%);
+
+    /* Text alignment */
     text-align: center;
-    /*background: #FFFF7F;*/
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* Appearance */
+    background: #FFFF7F;
     color: #777;
     text-transform: uppercase;
 }

@@ -112,16 +112,15 @@ class App extends React.Component {
                             <div className="left-part"></div>
                             <div className="right-part">
                                 <form className="add-item-form">
-                                    <div className="add-item-description">
-                                        <input type="text" name="description" placeholder="description" />
-                                        <div className="decoration-under-input">
-                                        </div>
-                                    </div>
+                                    <input type="text" name="description" placeholder="description" />
+                                    <div className="decoration-under-input"></div>
                                     <div className="add-item-picture">
                                         <input type="file" name="picture" />
                                         <div className="picture-upload-bg">
-                                            <i className="fa fa-cloud-upload" aria-hidden="true"></i>
-                                            uploader photo
+                                            <div>
+                                                <i className="fa fa-cloud-upload" aria-hidden="true"></i>
+                                                &nbsp;uploader photo
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
