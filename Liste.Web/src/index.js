@@ -122,13 +122,19 @@ class App extends React.Component {
                                     <input type="text" name="description" placeholder="description" />
                                     <div className="decoration-under-input"></div>
                                     <div className="add-item-picture">
-                                        <input type="file" name="picture" />
-                                        <div className="picture-upload-bg">
-                                            <div>
+                                        {/* Input: upload file */}
+                                        <div className="picture-upload-area">
+                                            {/* Input: upload file */}
+                                            <input type="file" name="picture" className="debug" />
+
+                                            {/* Overlay */}
+                                            <div className="picture-upload-overlay">
                                                 <FontAwesome iconName="cloud-upload" />
                                                 &nbsp;uploader photo
                                             </div>
                                         </div>
+
+                                        {/* Submit button */}
                                         <button className="submit-item-btn">
                                             <FontAwesome iconName="check" />
                                         </button>
