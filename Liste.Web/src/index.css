@@ -38,7 +38,7 @@ input, textarea, select, button {
     outline: none;
 }
 
-input[type="text"] {
+input[type="text"], button {
     padding: 0.5em 1em;
     text-transform: uppercase;
     border-top: 1px solid #aaa;
@@ -183,14 +183,18 @@ section .section-content-part .right-part {
 
 /* FORM - Create input */
 .add-item-form {
+    /* layout */
     display: flex;
     flex-direction: column;
+    flex-wrap: nowrap;
+
     border-bottom: 1px solid;
     border-bottom-color: #777;
     margin-top: 2rem;
     width: 25rem;
     height: 30rem;
 
+    /* Font appearance */
     font-family: "Oswald";
     font-size: 26px;
     font-weight: 200;
@@ -221,6 +225,9 @@ section .section-content-part .right-part {
     flex: 1;
     display: flex;
     flex-wrap: wrap;
+
+    /* To allow children positioning */
+    position: relative;
 }
 
 .add-item-form input[name="picture"] {
@@ -248,6 +255,13 @@ section .section-content-part .right-part {
     background: #FFFF7F;
     color: #777;
     text-transform: uppercase;
+}
+
+.add-item-form .submit-item-btn {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    opacity: 0.6;
 }
 
 @media screen and (max-width: 42em) {
