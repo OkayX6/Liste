@@ -1,3 +1,8 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
 body {
     font-family: "Oswald", "Segoe UI Light", "Helvetica Neue", sans-serif;
     font-size: 26px;
@@ -5,9 +10,6 @@ body {
 }
 
 .container {
-    position: fixed;
-    width: 100%;
-    height: 100%;
 }
 
 ol, ul {
@@ -123,22 +125,23 @@ section {
     position: fixed;
     text-align: left;
     top: 0px;
-    width: 90%;
-    left: 80%;
-    bottom: 0px;
+    left: 12rem;
+    width: calc(100% - 12rem);
+    height: 100%;
+    box-sizing: border-box;
     padding-left: 50px;
     padding-top: 20px;
     background: white;
     opacity: 0;
-    -webkit-transition: left 0.4s, opacity 0.4s;
-    transition: left 0.4s, opacity 0,4s;
+    transform: translateX(100%);
+    transition: transform 0.4s, opacity 0.4s;
+    box-shadow: 0 0 10em 0 rgba(0,0,0,0.2);
 }
 
 section.section-is-active {
     pointer-events: initial;
-    left: 12rem;
+    transform: translateX(0);
     opacity: 1;
-    box-shadow: 0 0 10em 0 rgba(0,0,0,0.2);
 }
 
 section > .section-header-part {
