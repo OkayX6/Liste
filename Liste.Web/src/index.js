@@ -22,6 +22,28 @@ function FontAwesome(props) {
     return (<i className={iconClass}></i>);
 }
 
+class Section extends React.Component {
+    render() {
+        return (
+            <section className={this.props.appearanceClass}>
+                <div className="section-header-part">
+                    <a className="section-close-button" href="#" onClick={this.props.onClose}>
+                        fermer <FontAwesome iconName="arrow-right" />
+                    </a>
+                    <div className="section-header-title">proposer un objet</div>
+                </div>
+
+                <div className="section-content-part">
+                    <div className="left-part"></div>
+                    <div className="right-part">
+                        {this.props.children}
+                    </div>
+                </div>
+            </section>
+        );
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -106,43 +128,33 @@ class App extends React.Component {
                         <a className="nav-item" href="#explore" onClick={() => this.openSection('explore')}>&gt; explorer</a>
                     </nav>
 
-                    <section className={this.appearanceClass()}>
-                        <div className="section-header-part">
-                            <a className="section-close-button" href="#" onClick={() => this.closeSection()}>
-                                fermer <FontAwesome iconName="arrow-right" />
-                            </a>
-                            <div className="section-header-title">proposer un objet</div>
-                        </div>
+                    {/* Section: add item */}
+                    <Section appearanceClass={this.appearanceClass()}
+                             onClose={() => this.closeSection()}>
+                        <form className="add-item-form">
+                            <input type="text" name="description" placeholder="DESCRIPTION" />
+                            <div className="decoration-under-input"></div>
+                            <div className="add-item-picture">
+                                {/* Input: upload file */}
+                                <label className="picture-upload-area">
+                                    {/* Input: upload file */}
+                                    <input type="file" name="picture" className="debug"
+                                        onChange={() => this.state.myStat} />
 
-                        <div className="section-content-part">
-                            <div className="left-part"></div>
-                            <div className="right-part">
-                                <form className="add-item-form">
-                                    <input type="text" name="description" placeholder="DESCRIPTION" />
-                                    <div className="decoration-under-input"></div>
-                                    <div className="add-item-picture">
-                                        {/* Input: upload file */}
-                                        <label className="picture-upload-area">
-                                            {/* Input: upload file */}
-                                            <input type="file" name="picture" className="debug" />
-
-                                            {/* Overlay */}
-                                            <div className="picture-upload-overlay">
-                                                <FontAwesome iconName="cloud-upload" />
-                                                &nbsp;uploader photo
-                                            </div>
-                                        </label>
-
-                                        {/* Submit button */}
-                                        <button className="submit-item-btn">
-                                            <FontAwesome iconName="check" />
-                                        </button>
+                                    {/* Overlay */}
+                                    <div className="picture-upload-overlay">
+                                        <FontAwesome iconName="cloud-upload" />
+                                        &nbsp;uploader photo
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                    </section>
+                                </label>
 
+                                {/* Submit button */}
+                                <button className="submit-item-btn">
+                                    <FontAwesome iconName="check" />
+                                </button>
+                            </div>
+                        </form>
+                    </Section>
                 </div>
             );
 
