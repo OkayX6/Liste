@@ -118,7 +118,7 @@ class App extends React.Component {
                             <div className="left-part"></div>
                             <div className="right-part">
                                 <form className="add-item-form">
-                                    <input type="text" name="description" placeholder="description" />
+                                    <input type="text" name="description" placeholder="DESCRIPTION" />
                                     <div className="decoration-under-input"></div>
                                     <div className="add-item-picture">
                                         {/* Input: upload file */}

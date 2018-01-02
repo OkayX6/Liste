@@ -46,7 +46,6 @@ input, textarea, select, button {
 
 input[type="text"], button {
     padding: 0.5em 1em;
-    text-transform: uppercase;
     border-top: 1px solid #aaa;
 }
 
@@ -73,8 +72,6 @@ nav {
     left: 0px;
     height: 100%;
     margin-top: 1em;
-    /*-webkit-transition: left 0.4s;
-    transition: left 0.4s;*/
 }
 
 nav::after {
