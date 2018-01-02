@@ -91,6 +91,7 @@ nav::after {
 }
 
 nav .nav-item {
+    cursor: pointer;
     text-decoration: none;
     letter-spacing: -0.02em;
     margin-left: 1em;
@@ -138,7 +139,6 @@ section {
     flex-direction: column;
 
     pointer-events: none;
-
 
     position: fixed;
     text-align: left;
