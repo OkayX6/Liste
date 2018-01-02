@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FacebookLogin from 'react-facebook-login';
 import fetch from 'node-fetch';
 import './index.css';
 import FontAwesome from './components/font-awesome.js';
@@ -14,15 +13,54 @@ function fetchStartupData() {
     return fetch(apiHost + '/startup');
 }
 
+function Title() {
+    return (
+        <div id="title">
+            liste <FontAwesome iconName="hand-pointer-o" />
+        </div>
+    );
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isConnected: true,
+            isConnected: null,
             fbAccessToken: null,
             profilePicture: null,
-            currentSection: 'add-object',
+            currentSection: null,//'add-object',
         };
+    }
+
+    componentDidMount() {
+        // Facebook SDK loading
+        // REF: https://medium.com/front-end-hacking/facebook-authorization-in-a-react-app-b7a9176aacb6
+        window.fbAsyncInit = function () {
+            window.FB.init({
+                appId: '154773301822164',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v2.11'
+            });
+
+            // Get FB login status
+            window.FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    console.log('Logged in.');
+                }
+                else {
+                    window.FB.login();
+                }
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
     }
 
     onLoggedInFacebook(response) {
@@ -44,7 +82,6 @@ class App extends React.Component {
             return "section-is-active";
         else
             return "";
-        //return classNames({ 'section-is-active': this.state.currentSection != null });
     }
 
     openSection(sectionName) {
@@ -61,22 +98,18 @@ class App extends React.Component {
     render() {
         if (this.state.isConnected == null) {
             return <div className="container">
-                <h1>loading...</h1>
-                <FacebookLogin hidden="true"
-                    appId="154773301822164"
-                    autoLoad={true}
-                    scope="public_profile,user_friends"
-                    callback={(response) => this.onLoggedInFacebook(response)} />
+                <Title />
+                <div className="global-msg-container">
+                    <h1 className="debug">chargement...</h1>
+                </div>
             </div>;
         }
         else if (this.state.isConnected === false) {
             return <div className="container">
-                <h1>Pas connecté</h1>
-                <FacebookLogin
-                    appId="154773301822164"
-                    autoLoad={true}
-                    scope="public_profile,user_friends"
-                    callback={(response) => this.onLoggedInFacebook(response)} />
+                <Title />
+                <div className="global-msg-container">
+                    <h1>chargement...</h1>
+                </div>
             </div>;
         }
         else {
@@ -89,9 +122,7 @@ class App extends React.Component {
 
             return (
                 <div className="container">
-                    <div id="title" className={this.appearanceClass()}>
-                        liste <i className="fa fa-hand-pointer-o" aria-hidden="true"></i> 
-                    </div>
+                    <Title />
                     {this.state.profilePicture &&
                         <img src={this.state.profilePicture} alt="" />}
 
