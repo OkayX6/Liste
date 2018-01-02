@@ -22,24 +22,84 @@ function FontAwesome(props) {
     return (<i className={iconClass}></i>);
 }
 
-class Section extends React.Component {
+function Section(props) {
+    return (
+        <section className={props.appearanceClass}>
+            <div className="section-header-part">
+                <a className="section-close-button" href="#" onClick={props.onClose}>
+                    fermer <FontAwesome iconName="arrow-right" />
+                </a>
+                <div className="section-header-title">proposer un objet</div>
+            </div>
+
+            <div className="section-content-part">
+                <div className="left-part"></div>
+                <div className="right-part">
+                    {props.children}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+class CreateItemSection extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentImageUrl: null,
+            currentBackgroundStyle: { },
+        };
+    }
+
+    tryPreviewImage(evt) {
+        if (evt.target.files && evt.target.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                this.setState({
+                    currentBackgroundStyle: {
+                        backgroundImage: `url('${e.target.result}')`,
+                        backgroundSize: `cover`,
+                        backgroundRepeat: `no-repeat`,
+                        backgroundPosition: `50% 50%`,
+                    }
+                });
+            }.bind(this);
+
+            reader.readAsDataURL(evt.target.files[0]);
+        }
+    }
+
     render() {
         return (
-            <section className={this.props.appearanceClass}>
-                <div className="section-header-part">
-                    <a className="section-close-button" href="#" onClick={this.props.onClose}>
-                        fermer <FontAwesome iconName="arrow-right" />
-                    </a>
-                    <div className="section-header-title">proposer un objet</div>
-                </div>
+            <Section appearanceClass={this.props.appearanceClass}
+                onClose={this.props.onClose}>
+                <form className="add-item-form">
+                    <input type="text" name="description" placeholder="DESCRIPTION" />
+                    <div className="decoration-under-input"></div>
+                    <div className="add-item-picture"
+                        style={this.state.currentBackgroundStyle}>
 
-                <div className="section-content-part">
-                    <div className="left-part"></div>
-                    <div className="right-part">
-                        {this.props.children}
+                        {/* Input: upload file */}
+                        <label className="picture-upload-area">
+                            {/* Input: upload file */}
+                            <input type="file" name="picture" className="debug"
+                                onChange={(e) => this.tryPreviewImage(e)} />
+
+                            {/* Overlay */}
+                            <div className="picture-upload-overlay">
+                                <FontAwesome iconName="cloud-upload" />
+                                &nbsp;uploader photo
+                            </div>
+                        </label>
+
+                        {/* Submit button */}
+                        <button className="submit-item-btn">
+                            <FontAwesome iconName="check" />
+                        </button>
                     </div>
-                </div>
-            </section>
+                </form>
+            </Section>
         );
     }
 }
@@ -52,7 +112,6 @@ class App extends React.Component {
             fbAccessToken: null,
             profilePicture: null,
             currentSection: 'add-object',
-            //currentSection: null,
         };
     }
 
@@ -129,32 +188,8 @@ class App extends React.Component {
                     </nav>
 
                     {/* Section: add item */}
-                    <Section appearanceClass={this.appearanceClass()}
-                             onClose={() => this.closeSection()}>
-                        <form className="add-item-form">
-                            <input type="text" name="description" placeholder="DESCRIPTION" />
-                            <div className="decoration-under-input"></div>
-                            <div className="add-item-picture">
-                                {/* Input: upload file */}
-                                <label className="picture-upload-area">
-                                    {/* Input: upload file */}
-                                    <input type="file" name="picture" className="debug"
-                                        onChange={() => this.state.myStat} />
-
-                                    {/* Overlay */}
-                                    <div className="picture-upload-overlay">
-                                        <FontAwesome iconName="cloud-upload" />
-                                        &nbsp;uploader photo
-                                    </div>
-                                </label>
-
-                                {/* Submit button */}
-                                <button className="submit-item-btn">
-                                    <FontAwesome iconName="check" />
-                                </button>
-                            </div>
-                        </form>
-                    </Section>
+                    <CreateItemSection appearanceClass={this.appearanceClass()}
+                                       onClose={() => this.closeSection()} />
                 </div>
             );
 
