@@ -60,6 +60,7 @@ input[type="text"], button {
     font-size: 30px;
     -webkit-transition: width 0.4s, right 0.4s;
     transition: width 0.4s, right 0.4s;
+    z-index: 3;
 }
 
 nav {
@@ -137,6 +138,8 @@ section {
     flex-direction: column;
 
     pointer-events: none;
+
+
     position: fixed;
     text-align: left;
     top: 0px;
@@ -146,8 +149,11 @@ section {
     box-sizing: border-box;
     padding-left: 50px;
     padding-top: 20px;
+
     background: white;
     opacity: 0;
+    z-index: 0;
+
     transform: translateX(100%);
     transition: transform 0.4s, opacity 0.4s;
     box-shadow: 0 0 10em 0 rgba(0,0,0,0.2);
@@ -157,6 +163,7 @@ section.section-is-active {
     pointer-events: initial;
     transform: translateX(0);
     opacity: 1;
+    z-index: 1;
 }
 
 section > .section-content-part {
@@ -232,7 +239,7 @@ section .section-content-part .right-part {
     flex-direction: column;
 
     /* Appearance */
-    background: #FFFFAF;
+    background: #FFFF7F;
 
     position: relative;
 }
@@ -260,6 +267,7 @@ section .section-content-part .right-part {
     /* Appearance */
     color: #777;
     text-transform: uppercase;
+    opacity: 0.4;
     cursor: pointer; /* "hand" cursor */
 
     /* Text alignment */
@@ -270,10 +278,11 @@ section .section-content-part .right-part {
 
     /* Height */
     height: 100%;
-    background: rgba(255,255,255,0.2);
+    /*background: rgba(255,255,255,0.2);*/
 }
 
 .picture-upload-overlay:hover {
+    opacity: 1;
     background: rgba(255,255,255,0.8);
 }
 

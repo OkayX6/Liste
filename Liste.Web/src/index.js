@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import FacebookLogin from 'react-facebook-login';
 import fetch from 'node-fetch';
 import './index.css';
-
-// Font Awesome
-// REF: https://stackoverflow.com/questions/23116591/how-to-include-a-font-awesome-icon-in-reacts-render
-import 'font-awesome/css/font-awesome.min.css';
-
+import FontAwesome from './components/font-awesome.js';
+import Section from './components/section.js';
 import classNames from 'classnames';
 
 const apiHost = "http://localhost:8080";
@@ -16,39 +13,29 @@ function fetchStartupData() {
     return fetch(apiHost + '/startup');
 }
 
-// Functional FontAwesome component
-function FontAwesome(props) {
-    var iconClass = "fa fa-" + props.iconName;
-    return (<i className={iconClass}></i>);
-}
-
-function Section(props) {
-    return (
-        <section className={props.appearanceClass}>
-            <div className="section-header-part">
-                <a className="section-close-button" href="#" onClick={props.onClose}>
-                    fermer <FontAwesome iconName="arrow-right" />
-                </a>
-                <div className="section-header-title">proposer un objet</div>
-            </div>
-
-            <div className="section-content-part">
-                <div className="left-part"></div>
-                <div className="right-part">
-                    {props.children}
-                </div>
-            </div>
-        </section>
-    );
-}
-
 class CreateItemSection extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentImageUrl: null,
-            currentBackgroundStyle: { },
+            currentBackgroundStyle: null,
         };
+    }
+
+    setBackgroundUrl(url) {
+        this.setState({
+            currentBackgroundStyle: {
+                backgroundImage: `url('${url}')`,
+                backgroundSize: `cover`,
+                backgroundRepeat: `no-repeat`,
+                backgroundPosition: `50% 50%`,
+            }
+        });
+
+    }
+
+    isPictureLoaded() {
+        return this.state.currentBackgroundStyle != null &&
+            this.state.currentBackgroundStyle.backgroundImage != null;
     }
 
     tryPreviewImage(evt) {
@@ -56,14 +43,7 @@ class CreateItemSection extends React.Component {
             var reader = new FileReader();
             
             reader.onload = function (e) {
-                this.setState({
-                    currentBackgroundStyle: {
-                        backgroundImage: `url('${e.target.result}')`,
-                        backgroundSize: `cover`,
-                        backgroundRepeat: `no-repeat`,
-                        backgroundPosition: `50% 50%`,
-                    }
-                });
+                this.setBackgroundUrl(e.target.result);
             }.bind(this);
 
             reader.readAsDataURL(evt.target.files[0]);
@@ -71,8 +51,19 @@ class CreateItemSection extends React.Component {
     }
 
     render() {
+        var uploadPhotoPlaceholder = null;
+        if (this.isPictureLoaded() == false) {
+            uploadPhotoPlaceholder = (
+                <div>
+                    <FontAwesome iconName="cloud-upload" />
+                    &nbsp;uploader photo
+                </div>
+            );
+        }
+
         return (
             <Section appearanceClass={this.props.appearanceClass}
+                title="proposer un objet"
                 onClose={this.props.onClose}>
                 <form className="add-item-form">
                     <input type="text" name="description" placeholder="DESCRIPTION" />
@@ -88,8 +79,7 @@ class CreateItemSection extends React.Component {
 
                             {/* Overlay */}
                             <div className="picture-upload-overlay">
-                                <FontAwesome iconName="cloud-upload" />
-                                &nbsp;uploader photo
+                                {uploadPhotoPlaceholder}
                             </div>
                         </label>
 
@@ -129,12 +119,16 @@ class App extends React.Component {
             }.bind(this));
     }
 
-    appearanceClass() {
-        return classNames({ 'section-is-active': this.state.currentSection != null });
+    appearanceClass(sectionName) {
+        if (this.state.currentSection === sectionName)
+            return "section-is-active";
+        else
+            return "";
+        //return classNames({ 'section-is-active': this.state.currentSection != null });
     }
 
     openSection(sectionName) {
-        if (this.state.currentSection == null)
+        if (this.state.currentSection != sectionName)
             this.setState({ currentSection: sectionName });
         else
             this.closeSection();
@@ -179,17 +173,27 @@ class App extends React.Component {
                         liste <i className="fa fa-hand-pointer-o" aria-hidden="true"></i> 
                     </div>
                     {this.state.profilePicture &&
-                        <img src={this.state.profilePicture} />}
+                        <img src={this.state.profilePicture} alt="" />}
 
                     <nav className={this.appearanceClass()}>
-                        <a className="nav-item" href="#add-object" onClick={() => this.openSection('add-object')}>&gt; proposer un objet</a>
-                        <a className="nav-item" href="#process-gift" onClick={() => this.openSection('process-gift')}>&gt; conclure un deal</a>
-                        <a className="nav-item" href="#explore" onClick={() => this.openSection('explore')}>&gt; explorer</a>
+                        <a className="nav-item" onClick={() => this.openSection('add-object')}>&gt; proposer un objet</a>
+                        <a className="nav-item" onClick={() => this.openSection('process-gift')}>&gt; conclure un deal</a>
+                        <a className="nav-item" onClick={() => this.openSection('explore')}>&gt; explorer</a>
                     </nav>
 
-                    {/* Section: add item */}
-                    <CreateItemSection appearanceClass={this.appearanceClass()}
+                    {/* Section: add object */}
+                    <CreateItemSection appearanceClass={this.appearanceClass("add-object")}
                                        onClose={() => this.closeSection()} />
+
+                    {/* Section: process-gift */}
+                    <Section appearanceClass={this.appearanceClass("process-gift")}
+                             title="conclure un deal"
+                             onClose={() => this.closeSection()} />
+
+                    {/* Section: explorer */}
+                    <Section appearanceClass={this.appearanceClass("explore")}
+                             title="explorer"
+                             onClose={() => this.closeSection()} />
                 </div>
             );
 
