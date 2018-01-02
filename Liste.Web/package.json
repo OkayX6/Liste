@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
-    "fb": "^2.0.0",
     "font-awesome": "^4.7.0",
     "node-fetch": "^1.7.3",
     "react": "^16.2.0",
