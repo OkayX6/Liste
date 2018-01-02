@@ -75,6 +75,7 @@ class CreateItemSection extends React.Component {
                         <label className="picture-upload-area">
                             {/* Input: upload file */}
                             <input type="file" name="picture" className="debug"
+                                accept=".jpg,.jpeg"
                                 onChange={(e) => this.tryPreviewImage(e)} />
 
                             {/* Overlay */}
