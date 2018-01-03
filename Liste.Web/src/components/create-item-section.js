@@ -1,6 +1,8 @@
 ﻿import React from 'react';
 import Section from './section.js';
 import FontAwesome from './font-awesome.js';
+import axios from 'axios';
+import FormData from 'form-data';
 import classNames from 'classnames';
 
 export default class extends React.Component {
@@ -8,6 +10,8 @@ export default class extends React.Component {
         super(props);
         this.state = {
             currentBackgroundStyle: null,
+            description: null,
+            picture: null,
         };
     }
 
@@ -27,16 +31,40 @@ export default class extends React.Component {
             this.state.currentBackgroundStyle.backgroundImage != null;
     }
 
-    tryPreviewImage(evt) {
-        if (evt.target.files && evt.target.files[0]) {
+    onDescriptionChange = (event) => {
+        this.setState({ description: event.target.value });
+    }
+
+    onPictureChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            var pictureFile = event.target.files[0];
+            this.setState({ picture: pictureFile });
+
             var reader = new FileReader();
             
             reader.onload = function (e) {
                 this.setBackgroundUrl(e.target.result);
             }.bind(this);
 
-            reader.readAsDataURL(evt.target.files[0]);
+            reader.readAsDataURL(pictureFile);
         }
+    }
+
+    onSubmit = (event) => {
+        // Max data: 2 MB
+        // TODO denisok: extract parameter
+        const form = new FormData({ maxDataSize: 2000000 });
+
+        form.append('description', this.state.description);
+        form.append('picture', this.state.picture);
+
+        axios.post('http://localhost:8080/cuir', form)
+            .then(function (response) {
+                console.log('success: %o', response);
+            })
+            .catch(function (error) {
+                console.log('error: %o', error);
+            });
     }
 
     render() {
@@ -58,7 +86,8 @@ export default class extends React.Component {
                 <form className={classNames("add-item-form", { hide: this.state.hide })}
                     onMouseEnter={() => this.setState({ hide: true })}
                     onMouseLeave={() => this.setState({ hide: false })}>
-                    <input type="text" name="description" placeholder="DESCRIPTION" />
+                    <input type="text" name="description" placeholder="DESCRIPTION"
+                        onChange={this.onDescriptionChange} />
                     <div className="decoration-under-input"></div>
                     <div className="add-item-picture"
                         style={this.state.currentBackgroundStyle}>
@@ -68,7 +97,7 @@ export default class extends React.Component {
                             {/* Input: upload file */}
                             <input type="file" name="picture" className="debug"
                                 accept=".jpg,.jpeg"
-                                onChange={(e) => this.tryPreviewImage(e)} />
+                                onChange={this.onPictureChange} />
 
                             {/* Overlay */}
                             <div className="picture-upload-overlay">
@@ -77,7 +106,8 @@ export default class extends React.Component {
                         </label>
 
                         {/* Submit button */}
-                        <button className="submit-item-btn" type="button">
+                        <button className="submit-item-btn" type="button"
+                            onClick={this.onSubmit}>
                             <FontAwesome iconName="check" />
                         </button>
                     </div>
