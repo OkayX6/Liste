@@ -15,11 +15,6 @@ type HttpClient = FSharp.Data.Http
 
 let corsConfig = { defaultCORSConfig with allowedUris = InclusiveOption.Some [ "http://localhost:3000" ] }
 
-let query () =
-    HttpClient.AsyncRequestString("https://graph.facebook.com/v2.11/me",
-        query=["access_token", ""])
-    |> ignore
-
 type UserAuthInfo = {
     UserId: string
     AccessToken: string
