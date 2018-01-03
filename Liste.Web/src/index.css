@@ -11,16 +11,25 @@ body {
 
 .global-msg-container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
     position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
-    justify-content: center;
-    align-items: center;
 }
 
-.global-msg-container > * {
-    transform: translateY(-2rem);
+.global-msg-container > h2 {
+    position: absolute;
+    margin-bottom: 1.5rem;
+    transform: translateY(-3.5rem);
+}
+
+.global-msg-container > #fbButton {
+    position: absolute;
+    transform: translateY(2rem);
 }
 
 .debug {
@@ -63,15 +72,17 @@ input[type="text"], button {
     border-top: 1px solid #aaa;
 }
 
+.title-style {
+    font-family: "Pacifico", cursive;
+    font-size: 30px;
+}
+
 #title {
     pointer-events: none;
     position: relative;
-    width: 100%;
     text-align: right;
     top: 0.2em;
     right: 0.75em;
-    font-family: "Pacifico", cursive;
-    font-size: 30px;
     -webkit-transition: width 0.4s, right 0.4s;
     transition: width 0.4s, right 0.4s;
     z-index: 3;
@@ -140,6 +151,13 @@ nav .nav-item:hover {
     -webkit-transform: rotate3d(0,0,1,45deg) scale3d(0,1,1);
     transform: rotate3d(0,0,1,45deg) scale3d(0,1,1);
     */
+}
+
+.container > button {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    font-size: 20px;
 }
 
 .nav-item:hover::before {

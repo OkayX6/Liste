@@ -15,7 +15,7 @@ function fetchStartupData() {
 
 function Title() {
     return (
-        <div id="title">
+        <div id="title" className="title-style">
             liste <FontAwesome iconName="hand-pointer-o" />
         </div>
     );
@@ -39,20 +39,15 @@ class App extends React.Component {
             window.FB.init({
                 appId: '154773301822164',
                 autoLogAppEvents: true,
+                cookie: true,
                 xfbml: true,
                 version: 'v2.11'
             });
 
             // Get FB login status
-            window.FB.getLoginStatus(function (response) {
-                if (response.status === 'connected') {
-                    console.log('Logged in.');
-                }
-                else {
-                    window.FB.login();
-                }
-            });
-        };
+            window.FB.Event.subscribe('auth.statusChange', this.onFbStatusChanged);
+            window.FB.getLoginStatus(this.onFbStatusChanged.bind(this));
+        }.bind(this);
 
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
@@ -63,19 +58,34 @@ class App extends React.Component {
         }(document, 'script', 'facebook-jssdk'));
     }
 
-    onLoggedInFacebook(response) {
-        console.log(response);
-        this.setState({
-            isConnected: true,
-            fbAccessToken: response.accessToken,
-        });
-
-        fetch("https://graph.facebook.com/v2.11/me?fields=id,name,picture,friends&access_token=" + this.state.fbAccessToken)
-            .then(response => response.json())
-            .then(function (body) {
-                this.setState({ profilePicture: body.picture.data.url })
-            }.bind(this));
+    connectWithFb = () => {
+        window.FB.login(this.onFbStatusChanged);
     }
+
+    onFbStatusChanged = (response) => {
+        console.log('onFbStatusChanged: response=%o', response);
+
+        if (response.status === 'connected') {
+            this.setState({ isConnected: true });
+        }
+        else {
+            this.setState({ isConnected: false });
+        }
+    }
+
+    //onLoggedInFacebook(response) {
+    //    console.log(response);
+    //    this.setState({
+    //        isConnected: true,
+    //        fbAccessToken: response.accessToken,
+    //    });
+
+    //    fetch("https://graph.facebook.com/v2.11/me?fields=id,name,picture,friends&access_token=" + this.state.fbAccessToken)
+    //        .then(response => response.json())
+    //        .then(function (body) {
+    //            this.setState({ profilePicture: body.picture.data.url })
+    //        }.bind(this));
+    //}
 
     appearanceClass(sectionName) {
         if (this.state.currentSection === sectionName)
@@ -100,15 +110,17 @@ class App extends React.Component {
             return <div className="container">
                 <Title />
                 <div className="global-msg-container">
-                    <h1 className="debug">chargement...</h1>
+                    <h2>chargement...</h2>
                 </div>
             </div>;
         }
-        else if (this.state.isConnected === false) {
+        else if (this.state.isConnected == false) {
             return <div className="container">
                 <Title />
                 <div className="global-msg-container">
-                    <h1>chargement...</h1>
+                    <h2>connecte-toi</h2>
+                    <div id="fbButton" className="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="true">
+                    </div>
                 </div>
             </div>;
         }
@@ -122,6 +134,9 @@ class App extends React.Component {
 
             return (
                 <div className="container">
+                    <button onClick={() => window.FB.logout()}>
+                        se déconnecter&nbsp;<FontAwesome iconName="sign-out" />
+                    </button>
                     <Title />
                     {this.state.profilePicture &&
                         <img src={this.state.profilePicture} alt="" />}
