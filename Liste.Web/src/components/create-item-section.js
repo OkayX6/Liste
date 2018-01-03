@@ -6,11 +6,17 @@ import FormData from 'form-data';
 import classNames from 'classnames';
 import './create-item-section.css';
 
+const FormState_Initial = '';
+const FormState_Processing = 'processing';
+const FormState_Success = 'success';
+const FormState_Failure = 'failure';
+
 export default class extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             currentBackgroundStyle: null,
+            formState: FormState_Initial,
             description: null,
             picture: null,
         };
@@ -59,13 +65,15 @@ export default class extends React.Component {
         form.append('description', this.state.description);
         form.append('picture', this.state.picture);
 
+        this.setState({ formState: FormState_Processing });
+
         axios.post('http://localhost:8080/cuir', form)
             .then(function (response) {
-                console.log('success: %o', response);
-            })
+                this.setState({ formState: FormState_Success });
+            }.bind(this))
             .catch(function (error) {
-                console.log('error: %o', error);
-            });
+                this.setState({ formState: FormState_Failure });
+            }.bind(this));
     }
 
     render() {
@@ -79,14 +87,11 @@ export default class extends React.Component {
             );
         }
 
-        return (
-            <Section appearanceClass={this.props.appearanceClass}
-                title="proposer un objet"
-                onClose={this.props.onClose}>
-
-                <form className={classNames("add-item-form", { hide: this.state.hide })}
-                    onMouseEnter={() => this.setState({ hide: true })}
-                    onMouseLeave={() => this.setState({ hide: false })}>
+        var child = null;
+        if (this.state.formState == FormState_Initial) {
+            child = (
+                <form className={classNames("add-item-form", this.state.formState)}
+                >
                     <input type="text" name="description" placeholder="DESCRIPTION"
                         onChange={this.onDescriptionChange} />
                     <div className="decoration-under-input"></div>
@@ -108,11 +113,36 @@ export default class extends React.Component {
 
                         {/* Submit button */}
                         <button className="submit-item-btn" type="button"
-                            onClick={this.onSubmit}>
-                            <FontAwesome iconName="check" />
+                            onClick={this.onSubmit}
+                            disabled={this.state.formState == FormState_Processing}>
+                            ENVOYER
+                            {/*<FontAwesome iconName="check" />*/}
                         </button>
                     </div>
                 </form>
+            );
+        }
+        else if (this.state.formState == FormState_Processing) {
+            child = "traitement...";
+        }
+        else if (this.state.formState == FormState_Success) {
+            child = <div>
+                ajouté&nbsp;<FontAwesome iconName="check" />
+            </div>;
+        }
+        else if (this.state.formState == FormState_Failure) {
+            child = <div>
+                échec&nbsp;<FontAwesome iconName="times" />
+            </div>;
+        }
+
+        return (
+            <Section appearanceClass={this.props.appearanceClass}
+                title="proposer un objet"
+                onClose={this.props.onClose}>
+                <div className={classNames("flex-center-children-vertically form-container", this.state.formState)}>
+                    {child}
+                </div>
             </Section>
         );
     }

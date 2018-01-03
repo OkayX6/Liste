@@ -1,4 +1,19 @@
-﻿/* FORM - Create input */
+﻿.flex-center-children-vertically {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+/* FORM container */
+.form-container {
+    margin-top: 2rem;
+    width: 25rem;
+    height: 30rem;
+    background: rgba(196,196,196,0.1);
+}
+
+/* FORM - Create input */
 .add-item-form {
     /* layout */
     display: flex;
@@ -7,7 +22,6 @@
 
     border-bottom: 1px solid;
     border-bottom-color: #777;
-    margin-top: 2rem;
     width: 25rem;
     height: 30rem;
 
@@ -18,7 +32,11 @@
     font-style: normal;
 }
 
-.add-item-form input[type="text"],
+.add-item-form input[type="text"] {
+    border-top: 1px solid #aaa;
+    background: white;
+}
+
 .add-item-form button {
     border-top: 1px solid #aaa;
 }
@@ -100,11 +118,11 @@
 
 .add-item-form .submit-item-btn {
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .add-item-form .submit-item-btn:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
 .add-item-form .submit-item-btn:active {

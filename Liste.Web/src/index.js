@@ -128,7 +128,7 @@ class App extends React.Component {
         }
         else if (this.state.isConnected == false) {
             return <div className="container">
-                <div class="header-area">
+                <div className="header-area">
                     <Title />
                 </div>
                 <div className="global-msg-container">
