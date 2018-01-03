@@ -26,7 +26,8 @@ class App extends React.Component {
             fbAccessToken: null,
             name: null,
             profilePictureUrl: null,
-            currentSection: null,//'add-object',
+            //currentSection: null,
+            currentSection: 'add-object',
         };
     }
 
