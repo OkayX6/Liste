@@ -18,6 +18,11 @@
     font-style: normal;
 }
 
+.add-item-form input[type="text"],
+.add-item-form button {
+    border-top: 1px solid #aaa;
+}
+
 /* FORM: 1/2 - DESCRIPTION */
 .add-item-form input[name="description"] {
     width: 100%;
