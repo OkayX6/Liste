@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import FontAwesome from './font-awesome.js';
+import './section.css';
 
 export default function(props) {
     return (

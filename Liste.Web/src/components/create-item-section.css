@@ -1,0 +1,107 @@
+﻿/* FORM - Create input */
+.add-item-form {
+    /* layout */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    border-bottom: 1px solid;
+    border-bottom-color: #777;
+    margin-top: 2rem;
+    width: 25rem;
+    height: 30rem;
+
+    /* Font appearance */
+    font-family: "Oswald";
+    font-size: 26px;
+    font-weight: 200;
+    font-style: normal;
+}
+
+/* FORM: 1/2 - DESCRIPTION */
+.add-item-form input[name="description"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-item-form .decoration-under-input {
+    background-image: linear-gradient(-45deg,
+        black 25%,
+        transparent 25%,
+        transparent 50%,
+        black 50%,
+        black 75%,
+        transparent 75%,
+        transparent);
+    background-size: 6px 6px;
+    height: 12px;
+}
+
+/* FORM: 2/2 - PICTURE */
+.add-item-form .add-item-picture {
+    flex: 1;
+
+    /* Flex container properties */
+    display: flex;
+    flex-direction: column;
+
+    /* Appearance */
+    background: #FFFF7F;
+
+    position: relative;
+}
+
+.add-item-picture .picture-preview-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.add-item-form .picture-upload-area {
+    /* Dimensions & positioning */
+    flex: 1;
+
+    /* To allow children relative positioning */
+    position: relative;
+}
+
+.add-item-form input[name="picture"] {
+    display: none;
+}
+
+.picture-upload-area .picture-upload-overlay {
+    /* Appearance */
+    color: #777;
+    text-transform: uppercase;
+    opacity: 0.4;
+    cursor: pointer; /* "hand" cursor */
+
+    /* Text alignment */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* Height */
+    height: 100%;
+    /*background: rgba(255,255,255,0.2);*/
+}
+
+.picture-upload-overlay:hover {
+    opacity: 1;
+    background: rgba(255,255,255,0.8);
+}
+
+.add-item-form .submit-item-btn {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.add-item-form .submit-item-btn:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.add-item-form .submit-item-btn:active {
+    background-color: rgba(255, 255, 255, 1);
+}

@@ -4,6 +4,7 @@ import FontAwesome from './font-awesome.js';
 import axios from 'axios';
 import FormData from 'form-data';
 import classNames from 'classnames';
+import './create-item-section.css';
 
 export default class extends React.Component {
     constructor(props) {
