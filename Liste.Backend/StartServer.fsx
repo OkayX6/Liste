@@ -1,6 +1,6 @@
 ﻿#load "Scripts/load-project-debug.fsx"
 
-open Program
+open Liste.Backend
 open Suave
 open FSharp.Data
 

@@ -1,17 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import fetch from 'node-fetch';
-import './index.css';
 import FontAwesome from './components/font-awesome.js';
 import Section from './components/section.js';
 import CreateItemSection from './components/create-item-section.js';
 import classNames from 'classnames';
+import axios from 'axios';
+import './index.css';
 
 const apiHost = "http://localhost:8080";
-
-function fetchStartupData() {
-    return fetch(apiHost + '/startup');
-}
 
 function Title() {
     return (
@@ -26,8 +22,10 @@ class App extends React.Component {
         super(props);
         this.state = {
             isConnected: null,
+            userId: null,
             fbAccessToken: null,
-            profilePicture: null,
+            name: null,
+            profilePictureUrl: null,
             currentSection: null,//'add-object',
         };
     }
@@ -62,30 +60,41 @@ class App extends React.Component {
         window.FB.login(this.onFbStatusChanged);
     }
 
+    queryStartupData = () => {
+        axios.get(apiHost + '/startup',
+            { params: {
+                userId: this.state.userId,
+                accessToken: this.state.fbAccessToken
+            }})
+            .then((response) => {
+                console.log('startup response: %o', response);
+                this.setState({
+                    name: response.data.Name,
+                    profilePictureUrl: response.data.PictureUrl
+                });
+            });
+    }
+
     onFbStatusChanged = (response) => {
         console.log('onFbStatusChanged: response=%o', response);
 
+        if (response.authResponse && response.authResponse.accessToken &&
+            response.authResponse.accessToken == this.state.fbAccessToken)
+            return;
+
         if (response.status === 'connected') {
-            this.setState({ isConnected: true });
+            this.setState({
+                isConnected: true,
+                userId: response.authResponse.userID,
+                fbAccessToken: response.authResponse.accessToken,
+            });
+
+            this.queryStartupData();
         }
         else {
             this.setState({ isConnected: false });
         }
     }
-
-    //onLoggedInFacebook(response) {
-    //    console.log(response);
-    //    this.setState({
-    //        isConnected: true,
-    //        fbAccessToken: response.accessToken,
-    //    });
-
-    //    fetch("https://graph.facebook.com/v2.11/me?fields=id,name,picture,friends&access_token=" + this.state.fbAccessToken)
-    //        .then(response => response.json())
-    //        .then(function (body) {
-    //            this.setState({ profilePicture: body.picture.data.url })
-    //        }.bind(this));
-    //}
 
     appearanceClass(sectionName) {
         if (this.state.currentSection === sectionName)
@@ -108,7 +117,9 @@ class App extends React.Component {
     render() {
         if (this.state.isConnected == null) {
             return <div className="container">
-                <Title />
+                <div class="header-area">
+                    <Title />
+                </div>
                 <div className="global-msg-container">
                     <h2>chargement...</h2>
                 </div>
@@ -116,7 +127,9 @@ class App extends React.Component {
         }
         else if (this.state.isConnected == false) {
             return <div className="container">
-                <Title />
+                <div class="header-area">
+                    <Title />
+                </div>
                 <div className="global-msg-container">
                     <h2>connecte-toi</h2>
                     <div id="fbButton" className="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="true">
@@ -137,9 +150,15 @@ class App extends React.Component {
                     <button onClick={() => window.FB.logout()}>
                         se déconnecter&nbsp;<FontAwesome iconName="sign-out" />
                     </button>
-                    <Title />
-                    {this.state.profilePicture &&
-                        <img src={this.state.profilePicture} alt="" />}
+                    <div className="header-area">
+                        <Title />
+                    </div>
+                    <div className="footer-area">
+                        {this.state.profilePictureUrl &&
+                            <img src={this.state.profilePictureUrl}
+                                 className="image-circle" />}
+                        <div>{this.state.name}</div>
+                    </div>
 
                     <nav className={this.appearanceClass()}>
                         <a className="nav-item" onClick={() => this.openSection('add-object')}>&gt; proposer un objet</a>
