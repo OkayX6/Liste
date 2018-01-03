@@ -47,7 +47,7 @@ input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
 input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 
 button:hover {
-    background: transparent;
+    background: #ccc;
     cursor: pointer;
 }
 
@@ -68,22 +68,15 @@ input, textarea, select, button {
     font-size: 26px;
     font-weight: 200;
     font-style: normal;
+    background: none;
     border: none;
     outline: none;
-}
-
-input[type="text"], button {
     padding: 0.5em 1em;
-    border-top: 1px solid #aaa;
 }
 
 .title-style {
     font-family: "Pacifico", cursive;
     font-size: 30px;
-}
-
-#title {
-    z-index: 3;
 }
 
 .header-area {
@@ -93,6 +86,7 @@ input[type="text"], button {
     margin-top: 0.2em;
     margin-right: 0.75em;
     position: relative;
+    z-index: 3;
 }
 
 .header-area > * {
@@ -105,24 +99,13 @@ input[type="text"], button {
     position: fixed;
     align-items: center;
     left: 0em;
-    padding-left: 2em;
+    /*padding-left: 2em;*/
     right: 0;
     bottom: 0em;
     z-index: 2;
-    /*background: white;*/
-    /*box-shadow: 0 0 1px 0 rgba(0,0,0,0.5);*/
-    /*border-top: 1px solid #ccc;*/
-}
-
-.image-circle {
-    /*border-radius: 50%;*/
-    /*position: fixed;*/
-    margin-right: 0.5em;
 }
 
 nav {
-    font-family: "Oswald", sans-serif;
-    font-style: normal;
     font-size: 48px;
     text-align: left;
     position: fixed;
