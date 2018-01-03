@@ -117,7 +117,7 @@ class App extends React.Component {
     render() {
         if (this.state.isConnected == null) {
             return <div className="container">
-                <div class="header-area">
+                <div className="header-area">
                     <Title />
                 </div>
                 <div className="global-msg-container">
@@ -147,17 +147,15 @@ class App extends React.Component {
 
             return (
                 <div className="container">
-                    <button onClick={() => window.FB.logout()}>
-                        se déconnecter&nbsp;<FontAwesome iconName="sign-out" />
-                    </button>
                     <div className="header-area">
                         <Title />
                     </div>
                     <div className="footer-area">
-                        {this.state.profilePictureUrl &&
-                            <img src={this.state.profilePictureUrl}
-                                 className="image-circle" />}
-                        <div>{this.state.name}</div>
+                        <img src={this.state.profilePictureUrl} alt=""
+                             width="50" height="50" />
+                        <button id="disconnectButton" onClick={() => window.FB.logout()}>
+                            se déconnecter
+                        </button>
                     </div>
 
                     <nav className={this.appearanceClass()}>

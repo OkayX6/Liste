@@ -95,7 +95,7 @@ input, textarea, select, button {
 
 .footer-area {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     position: fixed;
     align-items: center;
     left: 0em;
@@ -103,6 +103,10 @@ input, textarea, select, button {
     right: 0;
     bottom: 0em;
     z-index: 2;
+}
+
+#disconnectButton {
+    font-size: 20px;
 }
 
 nav {
@@ -166,14 +170,6 @@ nav .nav-item:hover {
     -webkit-transform: rotate3d(0,0,1,45deg) scale3d(0,1,1);
     transform: rotate3d(0,0,1,45deg) scale3d(0,1,1);
     */
-}
-
-.container > button {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    font-size: 20px;
-    z-index: 3;
 }
 
 .nav-item:hover::before {
