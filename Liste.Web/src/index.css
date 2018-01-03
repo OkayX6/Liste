@@ -78,14 +78,41 @@ input[type="text"], button {
 }
 
 #title {
-    pointer-events: none;
-    position: relative;
-    text-align: right;
-    top: 0.2em;
-    right: 0.75em;
-    -webkit-transition: width 0.4s, right 0.4s;
-    transition: width 0.4s, right 0.4s;
     z-index: 3;
+}
+
+.header-area {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    margin-top: 0.2em;
+    margin-right: 0.75em;
+    position: relative;
+}
+
+.header-area > * {
+    margin-left: 10px;
+}
+
+.footer-area {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    align-items: center;
+    left: 0em;
+    padding-left: 2em;
+    right: 0;
+    bottom: 0em;
+    z-index: 2;
+    /*background: white;*/
+    /*box-shadow: 0 0 1px 0 rgba(0,0,0,0.5);*/
+    /*border-top: 1px solid #ccc;*/
+}
+
+.image-circle {
+    /*border-radius: 50%;*/
+    /*position: fixed;*/
+    margin-right: 0.5em;
 }
 
 nav {
@@ -158,6 +185,7 @@ nav .nav-item:hover {
     right: 0;
     bottom: 0;
     font-size: 20px;
+    z-index: 3;
 }
 
 .nav-item:hover::before {
@@ -182,7 +210,8 @@ section {
     padding-left: 50px;
     padding-top: 20px;
 
-    background: white;
+    /*background: rgba(255, 255, 255, 0.95);*/
+    background: rgba(255, 255, 255, 1);
     opacity: 0;
     z-index: 0;
 
