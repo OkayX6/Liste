@@ -5,21 +5,18 @@ import axios from 'axios';
 import FormData from 'form-data';
 import classNames from 'classnames';
 import './create-item-section.css';
+import * as FormState from './form-state.js';
 
-const FormState_Initial = '';
-const FormState_Processing = 'processing';
-const FormState_Success = 'success';
-const FormState_Failure = 'failure';
+const InitialState = {
+    currentBackgroundStyle: null,
+    description: null,
+    picture: null,
+};
 
 export default class extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            currentBackgroundStyle: null,
-            formState: FormState_Initial,
-            description: null,
-            picture: null,
-        };
+        this.state = InitialState;
     }
 
     setBackgroundUrl(url) {
@@ -31,6 +28,10 @@ export default class extends React.Component {
                 backgroundPosition: `50% 50%`,
             }
         });
+    }
+
+    updateFormState = (newState) => {
+        this.props.updateFormState(newState);
     }
 
     isPictureLoaded() {
@@ -65,15 +66,21 @@ export default class extends React.Component {
         form.append('description', this.state.description);
         form.append('picture', this.state.picture);
 
-        this.setState({ formState: FormState_Processing });
+        this.updateFormState(FormState.Processing);
 
         axios.post('http://localhost:8080/cuir', form)
             .then(function (response) {
-                this.setState({ formState: FormState_Success });
+                this.updateFormState(FormState.Success);
             }.bind(this))
             .catch(function (error) {
-                this.setState({ formState: FormState_Failure });
+                this.updateFormState(FormState.Failure);
             }.bind(this));
+    }
+
+    onClose = () => {
+        this.updateFormState(FormState.Closed);
+        this.props.onClose();
+        this.setState(InitialState);
     }
 
     render() {
@@ -88,9 +95,9 @@ export default class extends React.Component {
         }
 
         var child = null;
-        if (this.state.formState == FormState_Initial) {
+        if (this.props.formState == FormState.Initial) {
             child = (
-                <form className={classNames("add-item-form", this.state.formState)}
+                <form className={classNames("add-item-form", this.props.formState)}
                 >
                     <input type="text" name="description" placeholder="DESCRIPTION"
                         onChange={this.onDescriptionChange} />
@@ -114,33 +121,35 @@ export default class extends React.Component {
                         {/* Submit button */}
                         <button className="submit-item-btn" type="button"
                             onClick={this.onSubmit}
-                            disabled={this.state.formState == FormState_Processing}>
+                            disabled={this.props.formState == FormState.Processing}>
                             ENVOYER
-                            {/*<FontAwesome iconName="check" />*/}
                         </button>
                     </div>
                 </form>
             );
         }
-        else if (this.state.formState == FormState_Processing) {
+        else if (this.props.formState == FormState.Processing) {
             child = "traitement...";
         }
-        else if (this.state.formState == FormState_Success) {
+        else if (this.props.formState == FormState.Success) {
             child = <div>
                 ajouté&nbsp;<FontAwesome iconName="check" />
             </div>;
         }
-        else if (this.state.formState == FormState_Failure) {
+        else if (this.props.formState == FormState.Failure) {
             child = <div>
                 échec&nbsp;<FontAwesome iconName="times" />
             </div>;
+        }
+        else if (this.props.formState == FormState.Closed) {
+            child = "fermé";
         }
 
         return (
             <Section appearanceClass={this.props.appearanceClass}
                 title="proposer un objet"
-                onClose={this.props.onClose}>
-                <div className={classNames("flex-center-children-vertically form-container", this.state.formState)}>
+                onClose={this.onClose}>
+                <div className={classNames("flex-center-children-vertically form-container", this.props.formState)}>
                     {child}
                 </div>
             </Section>

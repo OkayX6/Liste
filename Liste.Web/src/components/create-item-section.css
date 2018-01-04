@@ -113,12 +113,12 @@
 
 .picture-upload-overlay:hover {
     opacity: 1;
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.7);
 }
 
 .add-item-form .submit-item-btn {
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .add-item-form .submit-item-btn:hover {

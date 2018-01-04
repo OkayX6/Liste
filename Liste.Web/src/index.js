@@ -5,6 +5,7 @@ import Section from './components/section.js';
 import CreateItemSection from './components/create-item-section.js';
 import classNames from 'classnames';
 import axios from 'axios';
+import * as FormState from './components/form-state.js';
 import './index.css';
 
 const apiHost = "http://localhost:8080";
@@ -28,6 +29,7 @@ class App extends React.Component {
             profilePictureUrl: null,
             //currentSection: null,
             currentSection: 'add-object',
+            addItemFormState: FormState.Initial,
         };
     }
 
@@ -111,7 +113,16 @@ class App extends React.Component {
             this.closeSection();
     }
 
-    closeSection() {
+    openAddItemSection = () => {
+        this.updateAddItemSectionFormState(FormState.Initial);
+        this.openSection('add-item');
+    }
+
+    updateAddItemSectionFormState = (state) => {
+        this.setState({ addItemFormState: state });
+    }
+
+    closeSection = () => {
         this.setState({ currentSection: null });
     }
 
@@ -139,12 +150,12 @@ class App extends React.Component {
             </div>;
         }
         else {
-            // 0) Install fetch to have an HTTP client
-            // 0.1) Allow CORS in the API
-            // 1) Charger liste d'amis
-            // 2) Charger liste des objets disponibles
-            // 3) Créer bot
-            // 4) Envoyer photo à Bot
+            // [x] Install axios to have an HTTP client
+            // [x] Allow CORS in the API
+            // [ ] Charger liste d'amis
+            // [ ] Charger liste des objets disponibles
+            // [ ] Créer bot - pour récupérer les images
+            // [ ] Envoyer photo à Bot
 
             return (
                 <div className="container">
@@ -160,28 +171,28 @@ class App extends React.Component {
                     </div>
 
                     <nav className={this.appearanceClass()}>
-                        <a className="nav-item" onClick={() => this.openSection('add-object')}>&gt; proposer un objet</a>
+                        <a className="nav-item" onClick={() => this.openAddItemSection()}>&gt; proposer un objet</a>
                         <a className="nav-item" onClick={() => this.openSection('process-gift')}>&gt; conclure un deal</a>
                         <a className="nav-item" onClick={() => this.openSection('explore')}>&gt; explorer</a>
                     </nav>
 
-                    {/* Section: add object */}
-                    <CreateItemSection appearanceClass={this.appearanceClass("add-object")}
-                                       onClose={() => this.closeSection()} />
+                    {/* Section: add item */}
+                    <CreateItemSection appearanceClass={this.appearanceClass("add-item")}
+                        formState={this.state.addItemFormState}
+                        updateFormState={this.updateAddItemSectionFormState}
+                        onClose={this.closeSection} />
 
                     {/* Section: process-gift */}
                     <Section appearanceClass={this.appearanceClass("process-gift")}
                              title="conclure un deal"
-                             onClose={() => this.closeSection()} />
+                             onClose={this.closeSection} />
 
                     {/* Section: explorer */}
                     <Section appearanceClass={this.appearanceClass("explore")}
                              title="explorer"
-                             onClose={() => this.closeSection()} />
+                             onClose={this.closeSection} />
                 </div>
             );
-
-            //<div><button onClick={() => this.setState({ isConnected: false }) }>Logout</button></div>
         }
     }
 }
