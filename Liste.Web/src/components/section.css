@@ -8,11 +8,12 @@
     position: absolute;
     text-align: left;
     top: 0px;
-    width: 100%;
+    width: calc(100% - 15rem);
     height: 100%;
     box-sizing: border-box;
     padding-left: 50px;
     padding-top: 20px;
+    margin-left: 15rem;
 
     background: rgba(255, 255, 255, 1);
     opacity: 0;
@@ -21,7 +22,6 @@
     overflow: auto;
     transform: translateX(100%);
     transition: transform 0.4s, opacity 0.4s;
-    border-left: 1px solid gray;
     box-shadow: 0 0 10em 0 rgba(0,0,0,0.4);
 }
 

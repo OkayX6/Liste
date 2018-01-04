@@ -3,7 +3,6 @@ import Section from './section.js';
 import FontAwesome from './font-awesome.js';
 import axios from 'axios';
 import classNames from 'classnames';
-import './explore-section.css';
 
 export default class extends React.Component {
     onClose = () => {
