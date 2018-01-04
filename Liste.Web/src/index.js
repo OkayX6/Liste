@@ -181,6 +181,7 @@ class App extends React.Component {
                 <div className="container">
                     <div className="header-area">
                         <Title />
+                        {/*<button>Cuir</button>*/}
                     </div>
                     <div className="footer-area">
                         <img src={this.state.profilePictureUrl} alt=""

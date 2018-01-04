@@ -16,12 +16,12 @@ export default class extends React.Component {
             return <div key={item.PictureFileName}
                 style={{
                     backgroundImage: `url('${url}')`,
-                    backgroundSize: `cover`,
-                    backgroundRepeat: `no-repeat`,
-                    backgroundPosition: `50% 50%`,
-                    width: `300px`,
-                    height: `300px`,
-                    margin: `0px 25px 25px 0`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "50% 50%",
+                    width: "300px",
+                    height: "300px",
+                    margin: "0px 25px 25px 0",
                 }}>
             </div>;
         });
@@ -31,9 +31,9 @@ export default class extends React.Component {
                 title="explorer"
                 onClose={this.onClose}>
                 <div style={{
-                    display: `flex`,
-                    flexWrap: `wrap`,
-                    width: `100%`,
+                    display: "flex",
+                    flexWrap: "wrap",
+                    width: "100%",
                 }}>
                     {pictures}
                     <div style={{ width: '100%', height: '50px' }}></div>

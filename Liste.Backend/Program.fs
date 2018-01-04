@@ -13,33 +13,16 @@ open FSharp.Data
 open System.IO
 open Suave.RequestErrors
 open Suave.ServerErrors
+open Liste.Backend
+open Liste.Backend.Types
 
 type HttpClient = FSharp.Data.Http
 
 let internal PublicDirectory = __SOURCE_DIRECTORY__ + "\\public"
-let serverConfig =
-    { defaultConfig with homeFolder = Some PublicDirectory }
 
 let corsConfig = { defaultCORSConfig with allowedUris = InclusiveOption.Some [ "http://localhost:3000" ] }
-
-type UserAuthInfo = {
-    UserId: string
-    AccessToken: string
-}
-
-type UserInfo = {
-    Name: string
-    PictureUrl: string
-    Friends: string[]
-}
-
-let makeCypherRequestBody statement =
-    sprintf """{ "statements" : [{ "statement" : "%s" }]}"""  statement
-
-let addItemStatement userId description pictureUrl =
-    sprintf "MATCH (u: User) WHERE u.userId = '%s' \
-CREATE (u)-[:owns]->(i: Item { description: '%s', pictureFileName: '%s' })"
-        userId description pictureUrl
+let serverConfig =
+    { defaultConfig with homeFolder = Some PublicDirectory }
 
 let initUserData = request (fun r ->
     match r.["userId"], r.["accessToken"] with
@@ -53,7 +36,7 @@ let initUserData = request (fun r ->
         let id = userInfo?id.AsString()
         if id = userId then
             let statement = sprintf "MERGE (n: User { userId: '%s' })" userId
-            let body = makeCypherRequestBody statement
+            let body = Cypher.makeCypherRequestBody statement
             let response =
                 HttpClient.Request(
                     "http://localhost:7474/db/data/transaction/commit",
@@ -96,8 +79,8 @@ let addItem = request (fun r ->
 
         File.Copy(file.tempFilePath, pictureDestPath, overwrite= true)
 
-        let statement = addItemStatement userId desc file.fileName
-        let reqBody = makeCypherRequestBody statement
+        let statement = Cypher.addItemStatement userId desc file.fileName
+        let reqBody = Cypher.makeCypherRequestBody statement
 
         let response =
             HttpClient.Request(
@@ -119,24 +102,13 @@ let addItem = request (fun r ->
     | _ -> BAD_REQUEST "missing data"
 )
 
-type Item = {
-    Description: string
-    PictureFileName: string
-}
-
-let listItemsStatement userId =
-    sprintf "MATCH (u: User {userId: '%s'})-[:owns]->(i: Item) \
-RETURN i LIMIT 1000"
-        userId
-
 type private ListItemsProvider = JsonProvider<"""{"results":[{"columns":["i"],"data":[{"row":[{"description":"anniversaire","pictureFileName":"18673137_1734915279858214_123229596784953557_o.jpg"}],"meta":[{"id":4,"type":"node","deleted":false}]},{"row":[{"description":"num banh chok","pictureFileName":"21013928_465941063784264_7526666128899915644_o.jpg"}],"meta":[{"id":3,"type":"node","deleted":false}]}]}],"errors":[]}""", SampleIsList=false>
-
 
 let listItems = request (fun r ->
     match r.["userId"], r.["accessToken"] with
     | Some userId, _ ->
-        let statement = listItemsStatement userId
-        let reqBody = makeCypherRequestBody statement
+        let statement = Cypher.listItemsStatement userId
+        let reqBody = Cypher.makeCypherRequestBody statement
 
         let response =
             HttpClient.Request(
@@ -174,12 +146,12 @@ let app =
   choose
     [ GET >=> choose
         [
-            path "/startup" >=> initUserData
+            choose [
+                path "/startup" >=> initUserData
+                path "/items" >=> listItems ]
                 >=> setMimeType "application/json; charset=utf-8"
-            path "/" >=> Files.file "\\test.jpg"
-            path "/items" >=> listItems
             Files.browseHome
-            RequestErrors.NOT_FOUND "Page not found." 
+            NOT_FOUND "Page not found." 
         ]
         >=> cors corsConfig
       POST >=> choose
