@@ -196,23 +196,25 @@ class App extends React.Component {
                         <a className="nav-item" onClick={() => this.openSection('explore')}>&gt; explorer</a>
                     </nav>
 
-                    {/* Section: add item */}
-                    <CreateItemSection appearanceClass={this.appearanceClass("add-item")}
-                        userId={this.state.userId}
-                        formState={this.state.addItemFormState}
-                        updateFormState={this.updateAddItemSectionFormState}
-                        onClose={this.closeSection} />
+                    <div id="sectionContainer">
+                        {/* Section: add item */}
+                        <CreateItemSection appearanceClass={this.appearanceClass("add-item")}
+                            userId={this.state.userId}
+                            formState={this.state.addItemFormState}
+                            updateFormState={this.updateAddItemSectionFormState}
+                            onClose={this.closeSection} />
 
-                    {/* Section: process-gift */}
-                    <Section appearanceClass={this.appearanceClass("process-gift")}
-                             title="conclure un deal"
-                             onClose={this.closeSection} />
+                        {/* Section: process-gift */}
+                        <Section appearanceClass={this.appearanceClass("process-gift")}
+                                 title="conclure un deal"
+                                 onClose={this.closeSection} />
 
-                    {/* Section: explorer */}
-                    <ExploreSection appearanceClass={this.appearanceClass("explore")}
-                             userId={this.state.userId}
-                             items={this.state.items}
-                             onClose={this.closeSection} />
+                        {/* Section: explorer */}
+                        <ExploreSection appearanceClass={this.appearanceClass("explore")}
+                                 userId={this.state.userId}
+                                 items={this.state.items}
+                                 onClose={this.closeSection} />
+                    </div>
                 </div>
             );
         }

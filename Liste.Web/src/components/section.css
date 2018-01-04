@@ -3,13 +3,12 @@
     justify-content: flex-start;
     flex-direction: column;
 
-    pointer-events: none;
+    pointer-events: initial;
 
-    position: fixed;
+    position: absolute;
     text-align: left;
     top: 0px;
-    left: 12rem;
-    width: calc(100% - 12rem);
+    width: 100%;
     height: 100%;
     box-sizing: border-box;
     padding-left: 50px;
@@ -18,21 +17,27 @@
     background: rgba(255, 255, 255, 1);
     opacity: 0;
     z-index: 1;
-
+    
+    overflow: auto;
     transform: translateX(100%);
     transition: transform 0.4s, opacity 0.4s;
-    box-shadow: 0 0 5em 0 rgba(0,0,0,0.4);
+    border-left: 1px solid gray;
+    box-shadow: 0 0 10em 0 rgba(0,0,0,0.4);
 }
 
 section.section-is-active {
-    pointer-events: initial;
     transform: translateX(0);
     opacity: 1;
+    transition: opacity 0.4s, transform 0.4s;
+    height: 100%;
     z-index: 1;
+    display: flex;
 }
 
 section > .section-content-part {
     display: flex;
+    flex-wrap: wrap;
+    margin-top: 2rem;
 }
 
 section .section-close-button {
@@ -50,8 +55,10 @@ section .section-header-title {
 
 section .section-content-part .left-part {
     width: 13rem;
+    flex-shrink: 0;
 }
 
 section .section-content-part .right-part {
     display: flex;
+    flex: 1;
 }

@@ -23,9 +23,9 @@ export default class extends React.Component {
         this.setState({
             currentBackgroundStyle: {
                 backgroundImage: `url('${url}')`,
-                backgroundSize: `cover`,
-                backgroundRepeat: `no-repeat`,
-                backgroundPosition: `50% 50%`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: '50% 50%',
             }
         });
     }
@@ -112,7 +112,7 @@ export default class extends React.Component {
                         {/* Input: upload file */}
                         <label className="picture-upload-area">
                             {/* Input: upload file */}
-                            <input type="file" name="picture" className="debug"
+                            <input type="file" name="picture"
                                 accept=".jpg,.jpeg"
                                 onChange={this.onPictureChange} />
 
