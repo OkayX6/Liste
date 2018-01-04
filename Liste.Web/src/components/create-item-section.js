@@ -68,7 +68,11 @@ export default class extends React.Component {
 
         this.updateFormState(FormState.Processing);
 
-        axios.post('http://localhost:8080/cuir', form)
+        axios.post('http://localhost:8080/items', form, {
+                params: {
+                    userId: this.props.userId,
+                }
+            })
             .then(function (response) {
                 this.updateFormState(FormState.Success);
             }.bind(this))

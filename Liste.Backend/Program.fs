@@ -10,8 +10,14 @@ open Newtonsoft.Json
 open System.Text
 open FSharp.Data.JsonExtensions
 open FSharp.Data
+open System.IO
+open Suave.RequestErrors
 
 type HttpClient = FSharp.Data.Http
+
+let internal PublicDirectory = __SOURCE_DIRECTORY__ + "\\public"
+let serverConfig =
+    { defaultConfig with homeFolder = Some PublicDirectory }
 
 let corsConfig = { defaultCORSConfig with allowedUris = InclusiveOption.Some [ "http://localhost:3000" ] }
 
@@ -26,6 +32,14 @@ type UserInfo = {
     Friends: string[]
 }
 
+let makeCypherRequestBody statement =
+    sprintf """{ "statements" : [{ "statement" : "%s" }]}"""  statement
+
+let addItemStatement userId description pictureUrl =
+    sprintf "MATCH (n: User) WHERE n.userId = '%s' \
+CREATE (n)-[:owns]->(i: Item { description: '%s', pictureFileName: '%s' })"
+        userId description pictureUrl
+
 let initUserData = request (fun r ->
     match r.["userId"], r.["accessToken"] with
     | Some userId, Some accessToken ->
@@ -37,6 +51,24 @@ let initUserData = request (fun r ->
 
         let id = userInfo?id.AsString()
         if id = userId then
+            let statement = sprintf "MERGE (n: User { userId: '%s' })" userId
+            let body = makeCypherRequestBody statement
+            let response =
+                HttpClient.Request(
+                    "http://localhost:7474/db/data/transaction/commit",
+                    headers = seq [
+                        "Accept", "application/json; charset=UTF-8"
+                        "Content-Type", "application/json"
+                        "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
+                    ],
+                    httpMethod=HttpMethod.Post,
+                    body = HttpRequestBody.TextRequest body)
+
+            // if it passes, then we're good
+            match response.Body with
+            | Text(txt) -> printfn "- [GET /startup] neo4j server response: %s" txt
+            | _ -> ()
+
             { Name = userInfo?name.AsString()
               PictureUrl = userInfo?picture?data?url.AsString()
               Friends = Array.empty }
@@ -48,12 +80,46 @@ let initUserData = request (fun r ->
     | _, _ -> RequestErrors.BAD_REQUEST "Missing data"
 )
 
-let createItem = request (fun r ->
+let addItem = request (fun r ->
     printfn "query: %A" r.query
     printfn "files: %A" r.files
     printfn "form: %A" (r.form)
     printfn "multipart fields: %A" (r.multiPartFields)
-    OK "success"
+    match r.["userId"], r.["accessToken"], r.["description"], r.files with
+    | Some userId, _, Some desc, [file] ->
+        // [x] get user id
+        // [ ] check access token
+        // [x] copy file to "[PUBLIC]/[user_id]/[fileName]"
+        // [x] add item in Neo4j server
+        let userDirectoryPath = Path.Combine(PublicDirectory, userId)
+        // Create dir if it doesn't exist
+        Directory.CreateDirectory(userDirectoryPath) |> ignore
+
+        let pictureDestPath = Path.Combine(userDirectoryPath, file.fileName)
+
+        File.Copy(file.tempFilePath, pictureDestPath, overwrite= true)
+
+        let statement = addItemStatement userId desc file.fileName
+        let reqBody = makeCypherRequestBody statement
+
+        let response =
+            HttpClient.Request(
+                "http://localhost:7474/db/data/transaction/commit",
+                headers = seq [
+                    "Accept", "application/json; charset=UTF-8"
+                    "Content-Type", "application/json"
+                    "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
+                ],
+                httpMethod=HttpMethod.Post,
+                body = HttpRequestBody.TextRequest reqBody)
+
+        // if it passes, then we're good
+        match response.Body with
+        | Text(txt) -> printfn "- [POST /items] neo4j server response: %s" txt
+        | _ -> ()
+
+        OK "success"
+    | _ -> BAD_REQUEST "missing data"
 )
 
 let app =
@@ -61,11 +127,14 @@ let app =
     [ GET >=> choose
         [
             path "/startup" >=> initUserData
+                >=> setMimeType "application/json; charset=utf-8"
+            path "/" >=> Files.file "\\test.jpg"
+            Files.browseHome
+            RequestErrors.NOT_FOUND "Page not found." 
         ]
-        >=> setMimeType "application/json; charset=utf-8"
         >=> cors corsConfig
       POST >=> choose
-        [ path "/cuir" >=> createItem
+        [ path "/items" >=> addItem
           path "/goodbye" >=> OK "Good bye POST" ]
         >=> cors corsConfig
     ]

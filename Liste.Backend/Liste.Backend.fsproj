@@ -61,6 +61,7 @@
     <None Include="App.config" />
     <Content Include="packages.config" />
     <None Include="StartServer.fsx" />
+    <None Include="GraphApiPlayground.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">

@@ -178,6 +178,7 @@ class App extends React.Component {
 
                     {/* Section: add item */}
                     <CreateItemSection appearanceClass={this.appearanceClass("add-item")}
+                        userId={this.state.userId}
                         formState={this.state.addItemFormState}
                         updateFormState={this.updateAddItemSectionFormState}
                         onClose={this.closeSection} />
