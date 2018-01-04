@@ -2,4 +2,8 @@
 #I __SOURCE_DIRECTORY__
 #load "load-references-debug.fsx"
 #load "../AssemblyInfo.fs"
+      "../Types.fs"
+      "../Cypher.fs"
+      "../Config.fs"
+      "../Api.fs"
       "../Program.fs"
