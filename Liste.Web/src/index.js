@@ -66,31 +66,33 @@ class App extends React.Component {
     }
 
     queryStartupData = () => {
-            axios.get(apiHost + '/startup',
-                { params: {
+        axios
+            .get(apiHost + '/startup', {
+                params: {
                     userId: this.state.userId,
                     accessToken: this.state.fbAccessToken
-                }})
-                .then((response) => {
-                    this.setState({
-                        name: response.data.Name,
-                        profilePictureUrl: response.data.PictureUrl
-                    });
+                }
+            })
+            .then((response) => {
+                this.setState({
+                    name: response.data.Name,
+                    profilePictureUrl: response.data.PictureUrl
                 });
+            });
     }
 
     queryItemsData = () => {
-            axios
-                .get(apiHost + '/items', {
-                    params: {
-                        userId: this.state.userId
-                    }
-                })
-                .then((response) => {
-                    this.setState({
-                        items: response.data
-                    });
-                }); 
+        axios
+            .get(apiHost + '/items', {
+                params: {
+                    userId: this.state.userId
+                }
+            })
+            .then((response) => {
+                this.setState({
+                    items: response.data
+                });
+            }); 
     }
 
     onFbStatusChanged = (response) => {

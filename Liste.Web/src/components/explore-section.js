@@ -3,25 +3,9 @@ import Section from './section.js';
 import FontAwesome from './font-awesome.js';
 import axios from 'axios';
 import classNames from 'classnames';
+import './explore-section.css';
 
 export default class extends React.Component {
-    componentDidMount() {
-        if (this.props.userId) {
-            axios
-                .get('http://localhost:8080/items', {
-                    params: {
-                        userId: this.props.userId
-                    }
-                })
-                .then(function (response) {
-                    console.log('items: %o', response.data);
-                    this.setState({
-                        items: response.data
-                    });
-                }.bind(this));
-        }
-    }
-
     onClose = () => {
         this.props.onClose();
     }
@@ -40,8 +24,7 @@ export default class extends React.Component {
                     height: `300px`,
                 }}>
             </div>;
-        }
-        );
+        });
 
         return (
             <Section appearanceClass={this.props.appearanceClass}
@@ -50,10 +33,7 @@ export default class extends React.Component {
                 <div style={{
                     display: `flex`,
                     flexWrap: `wrap`,
-                    position: `relative`,
-                    marginTop: `2rem`,
-                    left: `0`,
-                    right: `2rem`,
+                    width: `100%`,
                 }}>
                     {pictures}
                 </div>
