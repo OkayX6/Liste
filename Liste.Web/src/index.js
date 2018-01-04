@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import FontAwesome from './components/font-awesome.js';
 import Section from './components/section.js';
 import CreateItemSection from './components/create-item-section.js';
+import ExploreSection from './components/explore-section.js';
 import classNames from 'classnames';
 import axios from 'axios';
 import * as FormState from './components/form-state.js';
@@ -30,6 +31,7 @@ class App extends React.Component {
             //currentSection: null,
             currentSection: 'add-object',
             addItemFormState: FormState.Initial,
+            items: [],
         };
     }
 
@@ -64,23 +66,34 @@ class App extends React.Component {
     }
 
     queryStartupData = () => {
-        axios.get(apiHost + '/startup',
-            { params: {
-                userId: this.state.userId,
-                accessToken: this.state.fbAccessToken
-            }})
-            .then((response) => {
-                console.log('startup response: %o', response);
-                this.setState({
-                    name: response.data.Name,
-                    profilePictureUrl: response.data.PictureUrl
+            axios.get(apiHost + '/startup',
+                { params: {
+                    userId: this.state.userId,
+                    accessToken: this.state.fbAccessToken
+                }})
+                .then((response) => {
+                    this.setState({
+                        name: response.data.Name,
+                        profilePictureUrl: response.data.PictureUrl
+                    });
                 });
-            });
+    }
+
+    queryItemsData = () => {
+            axios
+                .get(apiHost + '/items', {
+                    params: {
+                        userId: this.state.userId
+                    }
+                })
+                .then((response) => {
+                    this.setState({
+                        items: response.data
+                    });
+                }); 
     }
 
     onFbStatusChanged = (response) => {
-        console.log('onFbStatusChanged: response=%o', response);
-
         if (response.authResponse && response.authResponse.accessToken &&
             response.authResponse.accessToken == this.state.fbAccessToken)
             return;
@@ -93,6 +106,7 @@ class App extends React.Component {
             });
 
             this.queryStartupData();
+            this.queryItemsData();
         }
         else {
             this.setState({ isConnected: false });
@@ -120,6 +134,10 @@ class App extends React.Component {
 
     updateAddItemSectionFormState = (state) => {
         this.setState({ addItemFormState: state });
+
+        if (state == FormState.Success) {
+            this.queryItemsData();
+        }
     }
 
     closeSection = () => {
@@ -143,7 +161,7 @@ class App extends React.Component {
                     <Title />
                 </div>
                 <div className="global-msg-container">
-                    <h2>connecte-toi</h2>
+                    <h2 onClick={this.connectWithFb}>connecte-toi</h2>
                     <div id="fbButton" className="fb-login-button" data-max-rows="1" data-size="large" data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false" data-use-continue-as="true">
                     </div>
                 </div>
@@ -153,7 +171,7 @@ class App extends React.Component {
             // [x] Install axios to have an HTTP client
             // [x] Allow CORS in the API
             // [ ] Charger liste d'amis
-            // [ ] Charger liste des objets disponibles
+            // [x] Charger liste des objets disponibles
             // [ ] Créer bot - pour récupérer les images
             // [ ] Envoyer photo à Bot
 
@@ -189,8 +207,9 @@ class App extends React.Component {
                              onClose={this.closeSection} />
 
                     {/* Section: explorer */}
-                    <Section appearanceClass={this.appearanceClass("explore")}
-                             title="explorer"
+                    <ExploreSection appearanceClass={this.appearanceClass("explore")}
+                             userId={this.state.userId}
+                             items={this.state.items}
                              onClose={this.closeSection} />
                 </div>
             );
