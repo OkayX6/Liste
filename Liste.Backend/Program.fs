@@ -12,6 +12,7 @@ open FSharp.Data.JsonExtensions
 open FSharp.Data
 open System.IO
 open Suave.RequestErrors
+open Suave.ServerErrors
 
 type HttpClient = FSharp.Data.Http
 
@@ -36,8 +37,8 @@ let makeCypherRequestBody statement =
     sprintf """{ "statements" : [{ "statement" : "%s" }]}"""  statement
 
 let addItemStatement userId description pictureUrl =
-    sprintf "MATCH (n: User) WHERE n.userId = '%s' \
-CREATE (n)-[:owns]->(i: Item { description: '%s', pictureFileName: '%s' })"
+    sprintf "MATCH (u: User) WHERE u.userId = '%s' \
+CREATE (u)-[:owns]->(i: Item { description: '%s', pictureFileName: '%s' })"
         userId description pictureUrl
 
 let initUserData = request (fun r ->
@@ -81,10 +82,6 @@ let initUserData = request (fun r ->
 )
 
 let addItem = request (fun r ->
-    printfn "query: %A" r.query
-    printfn "files: %A" r.files
-    printfn "form: %A" (r.form)
-    printfn "multipart fields: %A" (r.multiPartFields)
     match r.["userId"], r.["accessToken"], r.["description"], r.files with
     | Some userId, _, Some desc, [file] ->
         // [x] get user id
@@ -122,6 +119,57 @@ let addItem = request (fun r ->
     | _ -> BAD_REQUEST "missing data"
 )
 
+type Item = {
+    Description: string
+    PictureFileName: string
+}
+
+let listItemsStatement userId =
+    sprintf "MATCH (u: User {userId: '%s'})-[:owns]->(i: Item) \
+RETURN i LIMIT 1000"
+        userId
+
+type private ListItemsProvider = JsonProvider<"""{"results":[{"columns":["i"],"data":[{"row":[{"description":"anniversaire","pictureFileName":"18673137_1734915279858214_123229596784953557_o.jpg"}],"meta":[{"id":4,"type":"node","deleted":false}]},{"row":[{"description":"num banh chok","pictureFileName":"21013928_465941063784264_7526666128899915644_o.jpg"}],"meta":[{"id":3,"type":"node","deleted":false}]}]}],"errors":[]}""", SampleIsList=false>
+
+
+let listItems = request (fun r ->
+    match r.["userId"], r.["accessToken"] with
+    | Some userId, _ ->
+        let statement = listItemsStatement userId
+        let reqBody = makeCypherRequestBody statement
+
+        let response =
+            HttpClient.Request(
+                "http://localhost:7474/db/data/transaction/commit",
+                headers = seq [
+                    "Accept", "application/json; charset=UTF-8"
+                    "Content-Type", "application/json"
+                    "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
+                ],
+                httpMethod=HttpMethod.Post,
+                body = HttpRequestBody.TextRequest reqBody)
+
+        // if it passes, then we're good
+        match response.Body with
+        | Text(responseJson) ->
+            printfn "- [GET /items] neo4j server response: %s" responseJson
+
+            let responseObject = ListItemsProvider.Parse(responseJson)
+            let responseData = [|
+                for data in responseObject.Results.[0].Data do
+                    let item = data.Row.[0]
+                    yield {
+                        Description = item.Description
+                        PictureFileName = item.PictureFileName
+                    }
+            |]
+            responseData
+            |> JsonConvert.SerializeObject
+            |> OK
+        | _ -> INTERNAL_ERROR "Didn't get data from Neo4j server"
+    | _ -> BAD_REQUEST "missing data"
+)
+
 let app =
   choose
     [ GET >=> choose
@@ -129,6 +177,7 @@ let app =
             path "/startup" >=> initUserData
                 >=> setMimeType "application/json; charset=utf-8"
             path "/" >=> Files.file "\\test.jpg"
+            path "/items" >=> listItems
             Files.browseHome
             RequestErrors.NOT_FOUND "Page not found." 
         ]

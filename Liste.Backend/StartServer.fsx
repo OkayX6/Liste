@@ -2,6 +2,5 @@
 
 open Liste.Backend
 open Suave
-open FSharp.Data
 
 startWebServer serverConfig app

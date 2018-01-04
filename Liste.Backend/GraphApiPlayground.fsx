@@ -1,4 +1,4 @@
-﻿#load "Scripts/load-project-debug.fsx"
+﻿#load "Scripts/load-references-debug.fsx"
 
 open FSharp.Data
 
