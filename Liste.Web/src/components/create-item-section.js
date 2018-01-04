@@ -153,7 +153,7 @@ export default class extends React.Component {
             <Section appearanceClass={this.props.appearanceClass}
                 title="proposer un objet"
                 onClose={this.onClose}>
-                <div className={classNames("flex-center-children-vertically form-container", this.props.formState)}>
+                <div className={classNames("form-container flex-center-children-vertically", this.props.formState)}>
                     {child}
                 </div>
             </Section>

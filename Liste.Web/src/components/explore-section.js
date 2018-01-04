@@ -21,6 +21,7 @@ export default class extends React.Component {
                     backgroundPosition: `50% 50%`,
                     width: `300px`,
                     height: `300px`,
+                    margin: `0px 25px 25px 0`,
                 }}>
             </div>;
         });
@@ -35,6 +36,7 @@ export default class extends React.Component {
                     width: `100%`,
                 }}>
                     {pictures}
+                    <div style={{ width: '100%', height: '50px' }}></div>
                 </div>
             </Section>
         );
