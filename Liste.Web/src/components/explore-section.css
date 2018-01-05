@@ -6,7 +6,11 @@
 
     /* Layout */
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
+}
+
+.flex-expand-1 {
+    flex: 1;
 }
 
 .item-thumbnail-desc {

@@ -21,7 +21,19 @@ export default class extends React.Component {
                     width: "300px",
                     height: "300px",
                 }}>
-                <div className="item-thumbnail-desc">{item.Description}</div>
+
+                {/* Delete button */}
+                <button>
+                    <FontAwesome iconName="trash-o" />
+                </button>
+
+                {/* Invisible white space */}
+                <div className="flex-expand-1"></div>
+
+                {/* Thumbnail description */}
+                <div className="item-thumbnail-desc">
+                    {item.Description}
+                </div>
             </div>;
         });
 
