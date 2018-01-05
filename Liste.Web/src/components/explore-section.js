@@ -14,7 +14,7 @@ export default class extends React.Component {
         const pictures = this.props.items.map((item) => {
             const url = 'http://localhost:8080/' + this.props.userId + '/' + item.PictureFileName;
 
-            return <div key={item.PictureFileName}
+            return <div key={item.Id}
                 className="item-thumbnail"
                 style={{
                     backgroundImage: `url('${url}')`,

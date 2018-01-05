@@ -12,6 +12,7 @@ type UserInfo = {
 }
 
 type Item = {
+    Id: string
     Description: string
     PictureFileName: string
 }

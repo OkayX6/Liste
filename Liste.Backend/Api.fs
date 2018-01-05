@@ -1,5 +1,6 @@
 ﻿module Liste.Backend.Api
 
+open System
 open System.IO
 open Suave
 open Suave.ServerErrors
@@ -63,11 +64,15 @@ let addItem = request (fun r ->
         // Create dir if it doesn't exist
         Directory.CreateDirectory(userDirectoryPath) |> ignore
 
-        let pictureDestPath = Path.Combine(userDirectoryPath, file.fileName)
+        let itemId = Guid.NewGuid()
+        let newPictureFileName =
+            // Path.GetExtension retains the dot and returns ".jpg" for example
+            (string itemId) + Path.GetExtension(file.fileName)
+
+        let pictureDestPath = Path.Combine(userDirectoryPath, newPictureFileName)
 
         File.Copy(file.tempFilePath, pictureDestPath, overwrite= true)
-
-        let statement = Cypher.addItemStatement userId desc file.fileName
+        let statement = Cypher.addItemStatement userId itemId desc newPictureFileName
         let reqBody = Cypher.makeCypherRequestBody statement
 
         let response =
@@ -90,7 +95,7 @@ let addItem = request (fun r ->
     | _ -> BAD_REQUEST "missing data"
 )
 
-type private ListItemsProvider = JsonProvider<"""{"results":[{"columns":["i"],"data":[{"row":[{"description":"anniversaire","pictureFileName":"18673137_1734915279858214_123229596784953557_o.jpg"}],"meta":[{"id":4,"type":"node","deleted":false}]},{"row":[{"description":"num banh chok","pictureFileName":"21013928_465941063784264_7526666128899915644_o.jpg"}],"meta":[{"id":3,"type":"node","deleted":false}]}]}],"errors":[]}""", SampleIsList=false>
+type private ListItemsProvider = JsonProvider<"""{"results":[{"columns":["i"],"data":[{"row":[{"description":"Alcool","id":"a95c411a-e5e5-4e25-810d-59251561ccf9","pictureFileName":"a95c411a-e5e5-4e25-810d-59251561ccf9.jpg"}],"meta":[{"id":16,"type":"node","deleted":false}]},{"row":[{"description":"CPH","id":"cbc7d731-e91c-4576-ab8e-5eb6c09e010b","pictureFileName":"cbc7d731-e91c-4576-ab8e-5eb6c09e010b.jpg"}],"meta":[{"id":15,"type":"node","deleted":false}]}]}],"errors":[]}""">
 
 let listItems = request (fun r ->
     match r.["userId"], r.["accessToken"] with
@@ -119,6 +124,7 @@ let listItems = request (fun r ->
                 for data in responseObject.Results.[0].Data do
                     let item = data.Row.[0]
                     yield {
+                        Id = string item.Id
                         Description = item.Description
                         PictureFileName = item.PictureFileName
                     }
