@@ -1,0 +1,26 @@
+﻿.item-thumbnail {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin: 0 25px 25px 0;
+
+    /* Layout */
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.item-thumbnail-desc {
+    /* Children layout */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    /* Dimensions & appearance */
+    width: 100%;
+    background: rgba(255, 255, 255, 0.85);
+
+    /* Text appearance */
+    padding: 13px 0;
+    text-transform: lowercase;
+    font-size: 26px;
+}

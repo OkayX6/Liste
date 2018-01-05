@@ -60,7 +60,7 @@ export default class extends React.Component {
 
     onSubmit = (event) => {
         // Max data: 2 MB
-        // TODO denisok: extract parameter
+        // TODO denisok: refactor constant somewhere
         const form = new FormData({ maxDataSize: 2000000 });
 
         form.append('description', this.state.description);

@@ -3,6 +3,7 @@ import Section from './section.js';
 import FontAwesome from './font-awesome.js';
 import axios from 'axios';
 import classNames from 'classnames';
+import './explore-section.css';
 
 export default class extends React.Component {
     onClose = () => {
@@ -14,15 +15,13 @@ export default class extends React.Component {
             const url = 'http://localhost:8080/' + this.props.userId + '/' + item.PictureFileName;
 
             return <div key={item.PictureFileName}
+                className="item-thumbnail"
                 style={{
                     backgroundImage: `url('${url}')`,
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "50% 50%",
                     width: "300px",
                     height: "300px",
-                    margin: "0px 25px 25px 0",
                 }}>
+                <div className="item-thumbnail-desc">{item.Description}</div>
             </div>;
         });
 

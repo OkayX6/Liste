@@ -129,6 +129,7 @@ input, textarea, select, button {
 
 #disconnectButton {
     font-size: 20px;
+    font-weight: 400;
 }
 
 nav {
