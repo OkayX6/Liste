@@ -6,6 +6,10 @@ import classNames from 'classnames';
 import './explore-section.css';
 
 export default class extends React.Component {
+    deleteItem = (event) => {
+        this.props.deleteItem(event.target.value);
+    }
+
     onClose = () => {
         this.props.onClose();
     }
@@ -23,7 +27,7 @@ export default class extends React.Component {
                 }}>
 
                 {/* Delete button */}
-                <button>
+                <button onClick={this.deleteItem} value={item.Id}>
                     <FontAwesome iconName="trash-o" />
                 </button>
 

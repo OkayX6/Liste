@@ -118,9 +118,9 @@ let listItems = request (fun r ->
     | _ -> BAD_REQUEST "missing data"
 )
 
-let deleteItem = request (fun r ->
-    match r.["userId"], r.["accessToken"], r.["itemId"] with
-    | Some userId, _, Some itemId ->
+let deleteItem (itemId: string) = request (fun r ->
+    match r.["userId"], r.["accessToken"] with
+    | Some userId, _ ->
         let statement = Cypher.deleteItemStatement userId (Guid.Parse(itemId))
         let reqBody = Cypher.makeCypherRequestBody statement
         let response = sendCypherRequest reqBody

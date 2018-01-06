@@ -24,12 +24,15 @@ let app =
             Files.browseHome
             NOT_FOUND "Page not found." 
         ]
-        >=> cors corsConfig
+
       POST >=> choose
         [ path "/items" >=> Api.addItem
           path "/goodbye" >=> OK "Good bye POST" ]
-        >=> cors corsConfig
+      
+      DELETE >=> pathScan "/items/%s" Api.deleteItem
+      OPTIONS >=> OK "GET,POST,DELETE"
     ]
+    >=> cors corsConfig
 
 [<EntryPoint>]
 let main argv = 
