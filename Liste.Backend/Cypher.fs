@@ -14,3 +14,9 @@ let listItemsStatement userId =
     sprintf "MATCH (u: User {userId: '%s'})-[:owns]->(i: Item) \
 RETURN i LIMIT 1000"
         userId
+
+let deleteItemStatement userId (itemId: Guid) =
+    sprintf "MATCH (u: User)-[:owns]->(i: Item) WHERE \
+    u.userId = '%s' AND i.id = '%s' \
+DETACH DELETE i"
+        userId (string itemId)

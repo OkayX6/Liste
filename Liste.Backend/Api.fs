@@ -13,6 +13,17 @@ open Suave.Successful
 
 type HttpClient = FSharp.Data.Http
 
+let sendCypherRequest reqBody =
+    HttpClient.Request(
+        "http://localhost:7474/db/data/transaction/commit",
+        headers = seq [
+            "Accept", "application/json; charset=UTF-8"
+            "Content-Type", "application/json"
+            "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
+        ],
+        httpMethod=HttpMethod.Post,
+        body = HttpRequestBody.TextRequest reqBody)
+
 let initUserData = request (fun r ->
     match r.["userId"], r.["accessToken"] with
     | Some userId, Some accessToken ->
@@ -25,17 +36,8 @@ let initUserData = request (fun r ->
         let id = userInfo?id.AsString()
         if id = userId then
             let statement = sprintf "MERGE (n: User { userId: '%s' })" userId
-            let body = Cypher.makeCypherRequestBody statement
-            let response =
-                HttpClient.Request(
-                    "http://localhost:7474/db/data/transaction/commit",
-                    headers = seq [
-                        "Accept", "application/json; charset=UTF-8"
-                        "Content-Type", "application/json"
-                        "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
-                    ],
-                    httpMethod=HttpMethod.Post,
-                    body = HttpRequestBody.TextRequest body)
+            let reqBody = Cypher.makeCypherRequestBody statement
+            let response = sendCypherRequest reqBody
 
             // if it passes, then we're good
             match response.Body with
@@ -49,7 +51,6 @@ let initUserData = request (fun r ->
             |> OK
         else
             Suave.RequestErrors.UNAUTHORIZED "Unknown user or invalid access token"
-        
     | _, _ -> RequestErrors.BAD_REQUEST "Missing data"
 )
 
@@ -67,24 +68,15 @@ let addItem = request (fun r ->
         let itemId = Guid.NewGuid()
         let newPictureFileName =
             // Path.GetExtension retains the dot and returns ".jpg" for example
-            (string itemId) + Path.GetExtension(file.fileName)
+            // ToLower invariant fixes the issues where the '.JPG' wouldn't be served by Suave
+            (string itemId) + Path.GetExtension(file.fileName).ToLower()
 
         let pictureDestPath = Path.Combine(userDirectoryPath, newPictureFileName)
 
         File.Copy(file.tempFilePath, pictureDestPath, overwrite= true)
         let statement = Cypher.addItemStatement userId itemId desc newPictureFileName
         let reqBody = Cypher.makeCypherRequestBody statement
-
-        let response =
-            HttpClient.Request(
-                "http://localhost:7474/db/data/transaction/commit",
-                headers = seq [
-                    "Accept", "application/json; charset=UTF-8"
-                    "Content-Type", "application/json"
-                    "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
-                ],
-                httpMethod=HttpMethod.Post,
-                body = HttpRequestBody.TextRequest reqBody)
+        let response = sendCypherRequest reqBody
 
         // if it passes, then we're good
         match response.Body with
@@ -102,17 +94,7 @@ let listItems = request (fun r ->
     | Some userId, _ ->
         let statement = Cypher.listItemsStatement userId
         let reqBody = Cypher.makeCypherRequestBody statement
-
-        let response =
-            HttpClient.Request(
-                "http://localhost:7474/db/data/transaction/commit",
-                headers = seq [
-                    "Accept", "application/json; charset=UTF-8"
-                    "Content-Type", "application/json"
-                    "Authorization", "Basic bmVvNGo6UGFzc3dvcmQxMjM="
-                ],
-                httpMethod=HttpMethod.Post,
-                body = HttpRequestBody.TextRequest reqBody)
+        let response = sendCypherRequest reqBody
 
         // if it passes, then we're good
         match response.Body with
@@ -136,3 +118,18 @@ let listItems = request (fun r ->
     | _ -> BAD_REQUEST "missing data"
 )
 
+let deleteItem = request (fun r ->
+    match r.["userId"], r.["accessToken"], r.["itemId"] with
+    | Some userId, _, Some itemId ->
+        let statement = Cypher.deleteItemStatement userId (Guid.Parse(itemId))
+        let reqBody = Cypher.makeCypherRequestBody statement
+        let response = sendCypherRequest reqBody
+
+        // if it passes, then we're good
+        match response.Body with
+        | Text(responseJson) ->
+            printfn "- [DELETE /item] neo4j server response: %s" responseJson
+            OK "success"
+        | _ -> INTERNAL_ERROR "Didn't get data from Neo4j server"
+    | _ -> BAD_REQUEST "missing parameters"
+)
