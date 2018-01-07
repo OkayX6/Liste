@@ -68,6 +68,8 @@
     <None Include="GraphApiPlayground.fsx" />
     <None Include="CypherPlayground.fsx" />
     <None Include=".gitignore" />
+    <None Include="devconfig.json" />
+    <None Include="devconfig.json.example" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Core">
