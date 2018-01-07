@@ -17,6 +17,8 @@ RETURN i LIMIT 1000"
 
 let deleteItemStatement userId (itemId: Guid) =
     sprintf "MATCH (u: User)-[:owns]->(i: Item) WHERE \
-    u.userId = '%s' AND i.id = '%s' \
-DETACH DELETE i"
+u.userId = '%s' AND i.id = '%s' \
+WITH i, i.pictureFileName as pictureFileName \
+DETACH DELETE i \
+RETURN pictureFileName"
         userId (string itemId)

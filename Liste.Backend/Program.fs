@@ -1,4 +1,4 @@
-﻿module Liste.Backend
+﻿module Liste.Backend.Program
 
 open Suave
 open Suave.Filters
@@ -36,5 +36,5 @@ let app =
 
 [<EntryPoint>]
 let main argv = 
-    printfn "%A" argv
+    startWebServer serverConfig app
     0 // return an integer exit code

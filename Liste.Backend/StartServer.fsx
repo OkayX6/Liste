@@ -1,6 +1,6 @@
 ﻿#load "Scripts/load-project-debug.fsx"
 
-open Liste.Backend
+open Liste.Backend.Program
 open Suave
 
 startWebServer serverConfig app
