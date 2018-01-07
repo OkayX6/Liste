@@ -75,6 +75,7 @@ export default class extends React.Component {
             })
             .then(function (response) {
                 this.updateFormState(FormState.Success);
+                this.onClose();
             }.bind(this))
             .catch(function (error) {
                 this.updateFormState(FormState.Failure);

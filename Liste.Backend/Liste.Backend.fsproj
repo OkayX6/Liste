@@ -66,6 +66,7 @@
     <Content Include="packages.config" />
     <None Include="StartServer.fsx" />
     <None Include="GraphApiPlayground.fsx" />
+    <None Include="CypherPlayground.fsx" />
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>

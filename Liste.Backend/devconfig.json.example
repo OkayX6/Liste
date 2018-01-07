@@ -1,0 +1,5 @@
+﻿{
+  "fbId": "replace",
+  "fbAccessToken": "replace",
+  "neo4jHost": "http://localhost:7474"
+}
