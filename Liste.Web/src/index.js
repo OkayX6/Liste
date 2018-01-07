@@ -19,20 +19,42 @@ function Title() {
     );
 }
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
+function getInitialState(isOffline) {
+    if (isOffline === false) {
+        return {
             isConnected: null,
             userId: null,
             fbAccessToken: null,
             name: null,
             profilePictureUrl: null,
-            //currentSection: null,
-            currentSection: 'add-object',
+            currentSection: 'explore',
             addItemFormState: FormState.Initial,
             items: [],
         };
+    }
+    else {
+        var devConfig = require("./devconfig.js");
+
+        // Offline mode (when no internet)
+        return {
+            isConnected: true,
+            userId: devConfig.TestFacebookId,
+            fbAccessToken: null,
+            name: null,
+            profilePictureUrl: null,
+            currentSection: 'explore',
+            addItemFormState: FormState.Initial,
+            items: [],
+        };
+    }
+}
+
+const IsOffline = true;
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = getInitialState(IsOffline);
     }
 
     componentDidMount() {
@@ -59,6 +81,10 @@ class App extends React.Component {
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
+        // denisok: quite ugly way
+        if (IsOffline)
+            this.queryItemsData();
     }
 
     connectWithFb = () => {
@@ -123,23 +149,40 @@ class App extends React.Component {
     }
 
     openSection(sectionName) {
-        if (this.state.currentSection != sectionName)
+        if (this.state.currentSection != sectionName) {
+            this.updateAddItemSectionFormState(FormState.Initial);
             this.setState({ currentSection: sectionName });
+        }
         else
             this.closeSection();
     }
 
     openAddItemSection = () => {
-        this.updateAddItemSectionFormState(FormState.Initial);
         this.openSection('add-item');
     }
 
     updateAddItemSectionFormState = (state) => {
         this.setState({ addItemFormState: state });
 
-        if (state == FormState.Success) {
+        if (state === FormState.Success) {
             this.queryItemsData();
         }
+    }
+
+    deleteItem = (itemId) => {
+        axios
+            .delete(apiHost + '/items/' + itemId, {
+                params: {
+                    userId: this.state.userId,
+                    accessToken: this.state.fbAccessToken
+                }
+            })
+            .then((response) => {
+                this.queryItemsData();
+            })
+            .catch((error) => {
+                console.log('erreur: %o', error);
+            });
     }
 
     closeSection = () => {
@@ -214,6 +257,7 @@ class App extends React.Component {
                         <ExploreSection appearanceClass={this.appearanceClass("explore")}
                                  userId={this.state.userId}
                                  items={this.state.items}
+                                 deleteItem={this.deleteItem}
                                  onClose={this.closeSection} />
                     </div>
                 </div>
